@@ -5,16 +5,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Laravel</title>
-
+        <link rel="stylesheet" type="text/css" href="{{ asset('/css/app.css') }}">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <script>
-        window.csrfToken =  <?php
-            echo json_encode([
-                'csrfToken' => csrf_token(),
-            ]);
-        ?>
-        </script>
-
     </head>
         <div id="app"></div>
         <script type="text/javascript" src="{{ asset('/js/app.js') }}"></script>

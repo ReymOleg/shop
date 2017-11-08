@@ -17,6 +17,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/test', function () {
-    echo json_encode(['array']);
-});
+
+Route::get('/products', ['uses' => 'ProductController@getProducts']);

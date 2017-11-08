@@ -11,13 +11,28 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::group(['middleware' => 'web'], function () {
 
-Route::any('/{slug}', function($slug) {
-   return view('welcome');
-})->where('slug', '([A-z\d-\/_.]+)?');
+//     Route::get('/', function () {
+// 	    return view('welcome');
+// 	});
+
+// 	Route::any('/{slug}', function($slug) {
+// 	   return view('welcome');
+// 	})->where('slug', '([A-z\d-\/_.]+)?');
+// });
+
+Route::get('/{vue_capture?}', function () {
+   return view('app');
+ })->where('vue_capture', '[\/\w\.-]*');
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+// Route::any('/{slug}', function($slug) {
+//    return view('welcome');
+// })->where('slug', '([A-z\d-\/_.]+)?');
 
 // Route::any( '(.*)', function(){
 //     return view('welcome');

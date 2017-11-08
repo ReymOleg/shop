@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);@charset "UTF-8";
+@charset "UTF-8";
 
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
@@ -8348,5 +8348,29 @@ button.close {
   .hidden-print {
     display: none !important;
   }
+}
+
+* {
+  font-family: 'Neucha', cursive;
+}
+
+header {
+  text-align: center;
+}
+
+.wrapper {
+  width: 980px;
+  margin: 0 auto;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  -webkit-transition: opacity .2s;
+  transition: opacity .2s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 

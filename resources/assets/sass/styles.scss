@@ -1,0 +1,19 @@
+* {
+	font-family: 'Neucha', cursive;
+}
+
+header {
+	text-align: center;
+}
+
+.wrapper {
+	width: 980px;
+	margin: 0 auto;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .2s
+}
+.fade-enter, .fade-leave-to {
+    opacity: 0
+}

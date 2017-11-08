@@ -8,10 +8,7 @@ export default {
 
   getters: {
     getProducts: (state, getters, rootState, rootGetters) => {
-    	console.log(state.products);
     	return state.products;
-    	// console.log(state);
-    	// console.log(config);
     }
   },
 

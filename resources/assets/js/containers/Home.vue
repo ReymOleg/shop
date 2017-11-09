@@ -1,15 +1,13 @@
 <template>
-	<div class="Results">
-		<div class="Item" v-for="item in products">
-			<router-link :to="{path: '/product/' + item.id }">
-				<div class="Item_title">{{ item.title }}</div>
-				<div class="Item__url">{{ item.description }}</div>
-			</router-link>
-		</div>
+	<div class="products">
+		<product v-for="(item, index) in products" :key="index" :item="item"></product>
+		<product v-for="(item, index) in products" :key="index" :item="item"></product>
 	</div>
 </template>
 
 <script type="text/javascript">
+	import Product from '../components/Product.vue'
+
 	export default {
 		mounted() {
 			this.$store._actions['products/getMainProducts'][0]()
@@ -19,5 +17,7 @@
 				return this.$store.getters['products/getMainProducts']
 			}
 		},
+  		components: { Product },
+		name: 'app',
 	}
 </script>

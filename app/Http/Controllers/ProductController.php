@@ -13,7 +13,7 @@ class ProductController extends Controller
     	return response()->json(['products' => $products]);
     }
 
-    public function search(Request $request) {
+    public function searchAutocomplete(Request $request) {
     	$url_parts = explode('/', $request->path());
     	$query = '';
     	if(isset($url_parts[3])) {
@@ -22,6 +22,7 @@ class ProductController extends Controller
     	$products = DB::table('products')
     		->orWhere('title', 'LIKE', '%' . $query . '%')
     		->orWhere('description', 'LIKE', '%' . $query . '%')
+    		->select('id', 'title', 'url')
     		->get();
     	return response()->json(['products' => $products]);
     }

@@ -4473,11 +4473,20 @@ body {
 
 #app {
   background-color: rgba(255, 255, 255, 0.9);
+  min-height: 101vh;
+}
+
+.center {
+  text-align: center;
 }
 
 .header-logo {
   font-size: 30px;
   padding: 10px 0;
+}
+
+nav {
+  height: 70px;
 }
 
 .header-search {
@@ -4507,5 +4516,34 @@ body {
   top: 40px;
   background: white;
   padding: 5px 15px;
+}
+
+.product {
+  padding: 5px;
+}
+
+.product .product-container {
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 3px 15px -5px black;
+          box-shadow: 0px 3px 15px -5px black;
+}
+
+.product .product-properties {
+  text-align: center;
+  font-size: 20px;
+}
+
+.product .product-image {
+  height: 200px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.product .product-image img {
+  max-width: 100%;
+  max-height: 200px;
+  text-align: center;
 }
 

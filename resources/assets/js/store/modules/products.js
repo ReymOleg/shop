@@ -4,15 +4,16 @@ export default {
   namespaced: true,
 	state: {
 		main: [],
-		search: [],
+		searchAutocomplete: [],
+		loadedProducts: [],
 	},
 
   getters: {
     getMainProducts: (state, getters, rootState, rootGetters) => {
     	return state.main;
     },
-    search: (state, getters, rootState, rootGetters) => {
-    	return state.search;
+    searchAutocomplete: (state, getters, rootState, rootGetters) => {
+    	return state.searchAutocomplete;
     },
   },
 
@@ -27,15 +28,18 @@ export default {
 		      throw e
 		    })
   	},
-  	search({commit}, query) {
-	  	axios.get(config.url.searchProducts + query)
+  	searchAutocomplete({commit}, query) {
+	  	axios.get(config.url.searchAutocomplete + query)
 		    .then(response => {
 					const products = response.data.products;
-					commit('set', { type: 'search', items: products })
+					commit('set', { type: 'searchAutocomplete', items: products })
 		    })
 		    .catch(e => {
 		      throw e
 		    })
+  	},
+  	getProduct({commit}, url) {
+
   	}
   },
 

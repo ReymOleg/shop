@@ -1,22 +1,43 @@
 <template>
-	<div class="Search">
-		<input type="text" class="Search__input" v-model="query">
-		<button class="Search__button" @click="search()">Найти</button>
+	<div class="header-search">
+		<input
+			class="col-xs-10"
+			type="text"
+			v-model="query"
+			@keyup="search()"
+			@blur="hide()"
+			placeholder="Поиск..."
+		>
+		<button class="col-xs-2 search-button" type="submit">
+			<i class="fa fa-search" aria-hidden="true"></i>
+		</button>
+		<div class="autocomplete" v-if="products && query">
+			<div v-for="item in products">
+				<router-link :to="{path: '/product/' + item.id }">{{ item.title }}</router-link>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script type="text/javascript">
-import store from '../store/index.js'
-
 	export default {
 		data() {
 			return {
-				query: ''
+				query: '',
 			}
 		},
 		methods: {
 			search() {
-				this.$store.dispatch('search', this.query)
+				this.$store._actions['products/search'][0](this.query)
+				console.log(this.$store);
+			},
+			hide() {
+				this.query = ''
+			}
+		},
+		computed: {
+			products() {
+				return this.$store.getters['products/search']
 			}
 		}
 	}

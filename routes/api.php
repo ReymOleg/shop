@@ -18,4 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/products', ['uses' => 'ProductController@getProducts']);
+Route::group(['prefix' => 'products'], function() {
+	Route::get('/', ['uses' => 'ProductController@getMainProducts']);
+	Route::get('/search/{query?}', ['uses' => 'ProductController@search'])->where('query', '(.*)');
+});
+
+// Route::post('/products', ['uses' => 'ProductController@getProducts']);

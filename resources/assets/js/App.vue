@@ -1,15 +1,15 @@
 <template>
   <div id="app" class="wrapper">
     <header class="container-fluid">
-      <div class="row">
-        <div class="header-left col-xs-4">
-          Some info
-        </div>
+      <div class="row top-header">
         <div class="header-logo col-xs-4">
-          LOGO
+          <router-link to="/">LOGO</router-link>
         </div>
         <div class="header-right col-xs-4">
-          <input type="text" name="search">
+          <search></search>
+        </div>
+        <div class="header-left col-xs-4">
+          Some info
         </div>
       </div>
       <nav>
@@ -17,7 +17,6 @@
         <router-link to="/brands">Brands</router-link>
         <router-link to="/contacts">Contacts</router-link>
       </nav>
-      <search></search>
     </header>
     <main>
       <transition name="fade" mode="out-in">
@@ -31,7 +30,6 @@
 
 <script>
 import Search from './components/Search.vue'
-import Results from './components/Results.vue'
 
 export default {
   name: 'app',

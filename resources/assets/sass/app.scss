@@ -2,7 +2,13 @@
 @import "variables";
 
 // Bootstrap
-@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+// @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+
+// Bootstrap grids
+@import "grids";
+
+// FontAwesome
+@import "font-awesome/scss/font-awesome";
 
 // Main styles
 @import "styles";

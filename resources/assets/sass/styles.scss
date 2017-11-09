@@ -2,8 +2,9 @@
 	font-family: 'Neucha', cursive;
 }
 
-header {
+.top-header {
 	text-align: center;
+	height: 80px;
 }
 
 .wrapper {
@@ -17,3 +18,45 @@ header {
 .fade-enter, .fade-leave-to {
     opacity: 0
 }
+
+body {
+	background-image: url(../images/timber.png);
+}
+
+#app {
+	background-color: rgba(255, 255, 255, 0.9);
+}
+
+.header-logo {
+	font-size: 30px;
+    padding: 10px 0;
+}
+
+.header-search {
+	& {
+		padding: 10px 0;
+		position: relative;
+	}
+	input,
+	button {
+		height: 40px;
+	    border: none;
+	    background-color: white;
+	    outline: none;
+	}
+	input {
+	    border-radius: 10px 0px 0px 10px;
+	}
+	button {
+	    border-radius: 0px 10px 10px 0px;
+	}
+	.autocomplete {
+		position: absolute;
+		left: 0px;
+		top: 40px;
+		background: white;
+		padding: 5px 15px;
+	}
+	
+}
+

@@ -8,8 +8,21 @@ use DB;
 
 class ProductController extends Controller
 {
-    public function getProducts(Request $request) {
+    public function getMainProducts(Request $request) {
     	$products = DB::table('products')->get();
+    	return response()->json(['products' => $products]);
+    }
+
+    public function search(Request $request) {
+    	$url_parts = explode('/', $request->path());
+    	$query = '';
+    	if(isset($url_parts[3])) {
+    		$query = urldecode($url_parts[3]);
+    	}
+    	$products = DB::table('products')
+    		->orWhere('title', 'LIKE', '%' . $query . '%')
+    		->orWhere('description', 'LIKE', '%' . $query . '%')
+    		->get();
     	return response()->json(['products' => $products]);
     }
 }

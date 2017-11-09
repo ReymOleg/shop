@@ -12,6 +12,7 @@ const routes = [
 	{ path: '/', component: Home},
 	{ path: '/brands', component: Brands},
 	{ path: '/contacts', component: Contacts},
+	{ path: '/product/*', component: Contacts},
 	// { path: '/passport-clients', component: Clients},
 	// { path: '/passport-authorized-clients', component: AuthorizedClients},
 	// { path: '/passport-personal-access-tokens', component: PersonalAccessTokens},

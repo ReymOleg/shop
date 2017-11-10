@@ -26,4 +26,13 @@ class ProductController extends Controller
     		->get();
     	return response()->json(['products' => $products]);
     }
+
+    public function getProduct(Request $request) {
+        // sleep(3);
+        $product_url = explode('/', $request->path())[2];
+        $product = DB::table('products')
+            ->where('url', $product_url)
+            ->get();
+        return response()->json(['product' => $product]);
+    }
 }

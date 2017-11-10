@@ -1,7 +1,6 @@
 <template>
 	<div class="products">
 		<product v-for="(item, index) in products" :key="index" :item="item"></product>
-		<product v-for="(item, index) in products" :key="index" :item="item"></product>
 	</div>
 </template>
 

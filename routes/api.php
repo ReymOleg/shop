@@ -23,4 +23,6 @@ Route::group(['prefix' => 'products'], function() {
 	Route::get('/searchAutocomplete/{query?}', ['uses' => 'ProductController@searchAutocomplete'])->where('query', '(.*)');
 });
 
+Route::get('/product/{url}', ['uses' => 'ProductController@getProduct'])->where('url', '(.*)');
+
 // Route::post('/products', ['uses' => 'ProductController@getProducts']);

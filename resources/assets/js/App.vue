@@ -21,7 +21,8 @@
     <main class="container-fluid">
       <transition name="fade" mode="out-in">
         <keep-alive>
-          <router-view></router-view>
+          <router-view :key="$route.path + new Date()"></router-view>
+          <!-- <router-view :key="new Date().toString()"></router-view> -->
         </keep-alive>
       </transition>
     </main>

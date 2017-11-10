@@ -1,7 +1,6 @@
 <template>
 	<div class="products">
-		<div>{{ show }}</div>
-		<div v-show="show">
+		<div v-show="visible">
 			<div>{{ product.title }}</div>
 			<img :src="/img/ + product.image">
 		</div>
@@ -15,29 +14,27 @@ import { mapActions } from 'vuex'
 	export default {
 		data() {
 			return {
-				show: false,
+				visible: false
 			}
 		},
 		computed: {
 			...mapGetters({
 				product: 'products/getProductOfUrl'
-			}),
+			})
 		},
 		methods: {
 			...mapActions({
-				'getProduct': 'products/getProduct'
-			}),
+				getProduct: 'products/getProduct'
+			})
 		},
 		mounted() {
 			this.getProduct(this.$route.params[0])
         },
 		watch: {
 			'product': {
-				handler: function(after, before) {
-					console.log(after, before);
-					this.show = true
-				},
-				deep: true
+				handler: function() {
+					this.visible = true
+				}
 			}
 		}
 	}

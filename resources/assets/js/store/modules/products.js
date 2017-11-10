@@ -6,19 +6,16 @@ export default {
 		main: [],
 		searchAutocomplete: [],
 		loadedByUrl: {},
-		currentProductUrl: null,
 	},
   getters: {
     getMainProducts: (state, getters, rootState, rootGetters) => {
-    	return state.main;
+    	return state.main
     },
     searchAutocomplete: (state, getters, rootState, rootGetters) => {
-    	return state.searchAutocomplete;
+    	return state.searchAutocomplete
     },
-    getProductOfUrl(state, getters, rootState, rootGetters) {
-    	// console.log(state.loadedByUrl[state.currentProductUrl])
-  		return state.loadedByUrl[state.currentProductUrl] || {};
-  		// return state.loadedByUrl;
+    getProductOfUrl: (state, getters, rootState, rootGetters) => {
+  		return state.loadedByUrl || {}
   	}
   },
   actions: {
@@ -43,12 +40,12 @@ export default {
 		    })
   	},
   	getProduct({commit}, url) {
-  		// commit('setLoadedProduct', { type: 'loadedByUrl', item: {}, url: url })
+			commit('setLoadedProduct', { type: 'loadedByUrl', item: {}, url: url })
   		axios.get(config.url.product + url)
 		    .then(response => {
 					const product = response.data.product;
-					commit('set', { type: 'currentProductUrl', items: url })
-					commit('setLoadedProduct', { type: 'loadedByUrl', item: product[0], url: url })
+					// commit('set', { type: 'currentProductUrl', items: url })
+					commit('set', { type: 'loadedByUrl', items: product[0] })
 		    })
 		    .catch(e => {
 		      throw e
@@ -58,11 +55,6 @@ export default {
   mutations: {
 		set(state, { type, items }) {
 			state[type] = items
-		},
-		setLoadedProduct(state, { type, item, url }) {
-			item.timestamp = new Date()
-			// console.log(item)
-			state[type][url] = item
-		},
+		}
 	},
 }

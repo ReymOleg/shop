@@ -9,9 +9,7 @@ import user from './modules/user.js'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-	state: {
-		user: [],
-	},
+	state: {},
 	modules: {
 		products: products,
 		user: user,

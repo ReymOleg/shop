@@ -4458,12 +4458,13 @@ hr {
 
 .fade-enter-active,
 .fade-leave-active {
-  /*transition: opacity .1s*/
+  -webkit-transition: opacity .2s;
+  transition: opacity .2s;
 }
 
 .fade-enter,
 .fade-leave-to {
-  /*opacity: 0*/
+  opacity: 0;
 }
 
 body {

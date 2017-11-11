@@ -12,24 +12,77 @@
 	margin: 0 auto;
 }
 
-.fade-enter-active, .fade-leave-active {
-    transition: opacity .2s
-}
-.fade-enter, .fade-leave-to {
-    opacity: 0
-}
-
 body {
 	background-image: url(../images/timber.png);
 }
 
-#app {
-	background-color: rgba(255, 255, 255, 0.9);
-	min-height: 101vh;
+#content {
+	& {
+		background-color: rgba(255, 255, 255, 0.9);
+		min-height: 101vh;
+		margin: 0;
+		transition: margin .4s ease;
+	}
+
+	&.cart-opened {
+		margin-left: -100px;
+		margin-right: 100px;
+	}
+
+	@media screen and (max-width: 1300px) {
+		&.cart-opened {
+			margin-left: -300px;
+			margin-right: 300px;
+		}
+	}
+
+	&.cart-opened .cart-container {
+		right: 0;
+	}
+
+}
+
+.cart-container {
+	position: fixed;
+    right: -315px;
+    top: 0;
+    width: 300px;
+    background: white;
+    padding: 20px;
+    height: 100%;
+    box-shadow: 0 0 15px black;
+    transition: right .2s ease;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: all .2s;
+}
+.fade-enter,
+.fade-leave-to {
+	padding-top: 10px;
+    opacity: 0;
+}
+
+.padding {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.no-padding {
+	padding: 0;
+}
+
+.no-margin {
+	margin: 0;
 }
 
 .center {
 	text-align: center;
+}
+
+.pointer {
+	cursor: pointer;
 }
 
 .header-logo {
@@ -38,7 +91,7 @@ body {
 }
 
 nav {
-	height: 70px;
+	height: 50px;
 }
 
 .header-search {
@@ -68,6 +121,10 @@ nav {
 	}
 }
 
+.header-right {
+	padding-top: 20px;
+}
+
 .product {
 	& {
 		padding: 5px;
@@ -91,5 +148,17 @@ nav {
 		max-width: 100%;
 		max-height: 200px;
 		text-align: center;
+	}
+}
+
+.product-content {
+	& {
+		
+	}
+	.product-main-image {
+		width: 100%;
+	}
+	.product-main-image img {
+		width: 100%;
 	}
 }

@@ -22,13 +22,11 @@
 // 	})->where('slug', '([A-z\d-\/_.]+)?');
 // });
 
-if (!Request::is('api')) {
-	Route::get('/{vue_capture?}', function () {
-	   return view('app');
-	 })->where('vue_capture', '[\/\w\.-]*');
-}
+Route::get('/{vue_capture?}', function () {
+   return view('app');
+})->where('vue_capture', '[\/\w\.-]*');
 
-// Route::group(['prefix' => '/api/'], function () {
+// Route::group(['prefix' => '/api'], function () {
 //    return response(500);
 //  });
 

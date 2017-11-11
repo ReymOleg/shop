@@ -1,8 +1,16 @@
 <template>
 	<div class="products">
-		<div v-show="visible">
-			<div>{{ product.title }}</div>
-			<img :src="/img/ + product.image">
+		<div class="product-content" v-show="visible">
+			<h1 class="padding no-margin">{{ product.title }}</h1>
+			<div class="col-xs-6">
+				<div class="product-main-image">
+					<img :src="/img/ + product.image">
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<p>{{ product.description }}</p>
+				<p>{{ product.price }}</p>
+			</div>
 		</div>
 	</div>
 </template>

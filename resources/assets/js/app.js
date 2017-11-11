@@ -5,6 +5,9 @@ import routes from './routes.js'
 import App from './App.vue'
 import store from './store'
 
+import axiosRetry from 'axios-retry';
+axiosRetry(axios, { retries: 2 });
+
 Vue.use(VueRouter)
 
 const router = new VueRouter({

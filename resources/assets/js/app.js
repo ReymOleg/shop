@@ -19,5 +19,31 @@ const app = new Vue({
     el: '#app',
     render: h => h(App), 
     store: store,
-    router: router
+    router: router,
+ //    data: {
+	// 	user: false
+	// },
+	// methods: {
+	// 	checkIfLogged(){
+	//         return new Promise((resolve, reject) => {
+	//           axios.get('/api/sessionStatus')
+	//              .then(response => {
+	//                 resolve(response.data.user);
+	//              })
+	//              .catch(error => {
+	//                 reject(error.response.data);
+	//              });
+	//         }) 
+	//     }
+	// },
+ //    created(){
+	// 	this.checkIfLogged()
+	// 		.then(response => {
+	// 			console.log(response)
+	// 			this.user = response ? response : false;
+	// 		})                    
+	// 		.catch(error => {
+	// 			console.log(error)
+	// 		});
+ //    }
 });

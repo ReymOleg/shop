@@ -5,5 +5,6 @@ export const url = {
 	products: apiUrl + '/products/',
 	// searchAutocomplete: apiUrl + 'products/search/', // returns not api result
 	searchAutocomplete: apiUrl + '/products/searchAutocomplete/',
-	auth: apiUrl + '/auth/',
+	login: apiUrl + '/user/login',
+	createUser: apiUrl + '/user/create',
 }

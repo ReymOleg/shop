@@ -1,7 +1,12 @@
 <template>
   <div id="parent" class="wrapper">
-    <div id="content" v-bind:class="mainClasses">
+    <div id="content" :class="classes.mainClasses">
       <header class="container-fluid">
+        <cart></cart>
+        <div v-if="!isAuth" class="login-modal-block" :class="classes.loginModalClasses">
+          <login-modal></login-modal>
+          <div @click="toggleLoginModal()" class="login-modal-overlay"></div>
+        </div>
         <div class="row top-header">
           <div class="header-logo col-xs-4">
             <router-link to="/">LOGO</router-link>
@@ -12,7 +17,12 @@
           <div class="header-right col-xs-4">
             <div class="row">
               <div class="col-xs-6">
-                <i class="fa fa-user" aria-hidden="true"></i> Войти
+                <div v-if="!isAuth" @click="toggleLoginModal()" class="pointer">
+                  <i class="fa fa-user" aria-hidden="true"></i> Войти
+                </div>
+                <div v-else>
+                  <i class="fa fa-user" aria-hidden="true"></i> {{ userData.name }}
+                </div>
               </div>
               <div class="col-xs-6 pointer">
                 <div @click="cartToggle()">
@@ -33,29 +43,53 @@
           <router-view :key="$route.path" class="container-fluid"></router-view>
         </transition>
       </main>
-      <cart></cart>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import Search from './components/Search.vue'
-import Cart from './components/Cart.vue'
+import Cart from './components/layouts/Cart.vue'
+import LoginModal from './components/layouts/LoginModal.vue'
 
 export default {
   data() {
     return {
-      mainClasses: {
-        'cart-opened': false,
+      classes: {
+        mainClasses: {
+          'cart-opened': false,
+        },
+        loginModalClasses: {
+          'active': false,
+          'modal-active': false,
+        }
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      isAuth: 'user/isAuth',
+      userData: 'user/userData'
+    })
+  },
   methods: {
     cartToggle() {
-      this.mainClasses['cart-opened'] = !this.mainClasses['cart-opened']
+      this.classes.mainClasses['cart-opened'] = !this.classes.mainClasses['cart-opened']
+    },
+    toggleLoginModal() {
+      this.classes.loginModalClasses['active'] = !this.classes.loginModalClasses['active']
+    }
+  },
+  watch: {
+    'isAuth': {
+      handler: function() {
+        console.log(this.isAuth)
+      }
     }
   },
   name: 'app',
-  components: { Search, Cart }
+  components: { Search, Cart, LoginModal }
 }
 </script>

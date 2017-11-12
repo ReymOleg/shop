@@ -2,6 +2,40 @@
 	font-family: 'Neucha', cursive;
 }
 
+@keyframes flipInX {
+	0% {
+		-webkit-transform: perspective(800px) rotate3d(1, 0, 0, 90deg);
+		transform: perspective(800px) rotate3d(1, 0, 0, 90deg);
+		-webkit-transition-timing-function: ease-in;
+		transition-timing-function: ease-in;
+		opacity: 0;
+	}
+	40% {
+		-webkit-transform: perspective(800px) rotate3d(1, 0, 0, -20deg);
+		transform: perspective(800px) rotate3d(1, 0, 0, -20deg);
+		-webkit-transition-timing-function: ease-in;
+		transition-timing-function: ease-in;
+	}
+	60% {
+		-webkit-transform: perspective(800px) rotate3d(1, 0, 0, 10deg);
+		transform: perspective(800px) rotate3d(1, 0, 0, 10deg);
+		opacity: 1;
+	}
+	80% {
+		-webkit-transform: perspective(800px) rotate3d(1, 0, 0, -5deg);
+		transform: perspective(800px) rotate3d(1, 0, 0, -5deg);
+	}
+	100% {
+		-webkit-transform: perspective(800px);
+		transform: perspective(800px);
+	}
+}
+
+@keyframes fadeIn {
+	0% {opacity: 0;}
+	100% {opacity: 1;}
+} 
+
 .top-header {
 	text-align: center;
 	height: 80px;
@@ -40,6 +74,62 @@ body {
 		right: 0;
 	}
 
+}
+
+.input-field {
+	& {
+		display: flex;
+		flex-flow: column-reverse;
+		margin-bottom: 1em;
+	}
+	label, input {
+		transition: all 0.2s;
+		touch-action: manipulation;
+	}
+	label {
+		font-size: 11px;
+	}
+	input {
+		font-size: 14px;
+	}
+	input {
+		border: 0;
+		border-bottom: 1px solid #ccc;
+		font-family: inherit;
+		-webkit-appearance: none;
+		border-radius: 0;
+		padding: 0;
+		cursor: text;
+	}
+	input:focus {
+		outline: 0;
+		border-bottom: 1px solid #666;
+	}
+	label {
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+	input:placeholder-shown + label {
+		cursor: text;
+		max-width: 66.66%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		transform-origin: left bottom;
+		transform: translate(0, 2.125rem) scale(1.5);
+	}
+	::-webkit-input-placeholder {
+		opacity: 0;
+		transition: inherit;
+	}
+	input:focus::-webkit-input-placeholder {
+		opacity: 1;
+	}
+	input:not(:placeholder-shown) + label,
+	input:focus + label {
+		transform: translate(0, 0) scale(1);
+		cursor: pointer;
+	}
 }
 
 .cart-container {
@@ -81,8 +171,28 @@ body {
 	text-align: center;
 }
 
+.block.center {
+	margin: 0 auto;
+}
+
 .pointer {
 	cursor: pointer;
+}
+
+.button {
+	border: none;
+	border-radius: 5px;
+	padding: 5px 15px;
+	outline: none;
+}
+
+.button.primary {
+	background-color: $primary-bg;
+	color: white;
+}
+
+.block {
+	display: block;
 }
 
 .header-logo {
@@ -161,4 +271,85 @@ nav {
 	.product-main-image img {
 		width: 100%;
 	}
+}
+
+
+.login-modal {
+	display: none;
+    position: fixed;
+    width: 500px;
+    left: 50%;
+    top: 40%;
+    margin-left: -250px;
+    margin-top: -150px;
+    padding-bottom: 20px;
+    z-index: 1001;
+    background-color: white;
+    box-shadow: 0 2px 10px black;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.login-modal-overlay {
+	display: none;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background-color: rgba(0,0,0,.5);
+	z-index: 1000;
+}
+
+.login-modal-block.active {
+	.login-modal {
+		display: block;
+		backface-visibility: visible !important;
+		animation-name: flipInX;
+		animation-duration: .8s;
+		animation-fill-mode: both;
+	}
+	.login-modal-overlay {
+		display: block;
+		animation-name: fadeIn;
+		animation-duration: .3s;
+		animation-fill-mode: both;
+	}
+}
+
+.login-modal button {
+    height: 50px;
+    font-size: 20px;
+}
+
+.login-choose {
+	& {
+		font-size: 16px;
+		line-height: 3;
+	}
+	.login-tab,
+	.register-tab {
+		cursor: pointer;
+		background-color: #f5f5f5;
+    	color: #929292;
+	}
+	.login-tab.active,
+	.register-tab.active {
+		background-color: inherit;
+		color: black;
+		border: none;
+	}
+}
+
+.login-block,
+.register-block {
+	display: none;
+}
+
+.login-block.active,
+.register-block.active {
+	display: block;
+	animation-name: flipInX;
+	animation-duration: .8s;
+	animation-fill-mode: both;
 }

@@ -17,6 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/sessionStatus', function() {
+    return ['user' => Auth::user() ? Auth::user()->load('profile') : null];
+});
 
 Route::group(['prefix' => 'products'], function() {
 	Route::get('/', ['uses' => 'ProductController@getMainProducts']);
@@ -25,4 +28,12 @@ Route::group(['prefix' => 'products'], function() {
 
 Route::get('/product/{url}', ['uses' => 'ProductController@getProduct'])->where('url', '(.*)');
 
-// Route::post('/products', ['uses' => 'ProductController@getProducts']);
+
+
+Route::group(['prefix' => 'user'], function() {
+
+	Route::post('/login', ['uses' => 'AuthController@login']);
+
+	Route::post('/create', ['uses' => 'AuthController@createUser']);
+
+});

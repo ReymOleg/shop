@@ -6,16 +6,23 @@
 
 <script type="text/javascript">
 	import Product from '../components/Product.vue'
+	import { mapGetters } from 'vuex'
+	import { mapActions } from 'vuex'
 
 	export default {
-		mounted() {
-			this.$store._actions['products/getMainProducts'][0]()
-        },
 		computed: {
-			products() {
-				return this.$store.getters['products/getMainProducts']
-			}
+			...mapGetters({
+				products: 'products/getMainProducts'
+			})
 		},
+		methods: {
+			...mapActions({
+				getMainProducts: 'products/getMainProducts'
+			})
+		},
+		mounted() {
+			this.getMainProducts()
+        },
   		components: { Product },
 		name: 'app',
 	}

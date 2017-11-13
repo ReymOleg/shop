@@ -33,9 +33,22 @@
           </div>
         </div>
         <nav class="container-fluid center">
-          <router-link to="/">Home</router-link>
+          <div v-if="categories" v-for="parentCategory of categories" class="nav-category">
+            <router-link key="parentCategory.url" :to="'/category/' + parentCategory.url">{{ parentCategory.name }}</router-link>
+            <div class="nav-subcategories">
+              <div class="col-xs-6">
+                <router-link class="block" key="subcategory.url" v-for="subcategory of parentCategory.subcategories" :to="'/category/' + parentCategory.url + '/' + subcategory.url">{{ subcategory.name }}</router-link>
+              </div>
+              <div class="col-xs-6">
+                <div class="block">
+                  <img :src="/img/ + parentCategory.image">
+                </div>
+              </div>
+            </div>
+          </div>
+  <!--         <router-link to="/">Home</router-link>
           <router-link to="/brands">Brands</router-link>
-          <router-link to="/contacts">Contacts</router-link>
+          <router-link to="/contacts">Contacts</router-link> -->
         </nav>
       </header>
       <main class="container-fluid">
@@ -71,16 +84,23 @@ export default {
   computed: {
     ...mapGetters({
       isAuth: 'user/isAuth',
-      userData: 'user/userData'
+      userData: 'user/userData',
+      categories: 'categories/getAllCategories'
     })
   },
   methods: {
+    ...mapActions({
+      getAllCategories: 'categories/getAllCategories'
+    }),
     cartToggle() {
       this.classes.mainClasses['cart-opened'] = !this.classes.mainClasses['cart-opened']
     },
     toggleLoginModal() {
       this.classes.loginModalClasses['active'] = !this.classes.loginModalClasses['active']
     }
+  },
+  mounted() {
+    this.getAllCategories(this.$route.params)
   },
   watch: {
     'isAuth': {

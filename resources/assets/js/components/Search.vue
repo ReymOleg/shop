@@ -21,6 +21,9 @@
 </template>
 
 <script type="text/javascript">
+import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
+
 	export default {
 		data() {
 			return {
@@ -29,9 +32,12 @@
 			}
 		},
 		methods: {
+			...mapActions({
+				searchAutocomplete: 'products/searchAutocomplete'
+			}),
 			search() {
 				this.visible = true
-				this.$store._actions['products/searchAutocomplete'][0](this.query)
+				this.searchAutocomplete(this.query)
 			},
 			hide() {
 				let _self = this;
@@ -41,9 +47,9 @@
 			}
 		},
 		computed: {
-			products() {
-				return this.$store.getters['products/searchAutocomplete']
-			}
+			...mapGetters({
+				products: 'products/searchAutocomplete',
+			})
 		}
 	}
 </script>

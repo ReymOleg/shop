@@ -21,6 +21,8 @@ Route::get('/sessionStatus', function() {
     return ['user' => Auth::user() ? Auth::user()->load('profile') : null];
 });
 
+
+// PRODUCTS
 Route::group(['prefix' => 'products'], function() {
 	Route::get('/', ['uses' => 'ProductController@getMainProducts']);
 	Route::get('/searchAutocomplete/{query?}', ['uses' => 'ProductController@searchAutocomplete'])->where('query', '(.*)');
@@ -29,7 +31,7 @@ Route::group(['prefix' => 'products'], function() {
 Route::get('/product/{url}', ['uses' => 'ProductController@getProduct'])->where('url', '(.*)');
 
 
-
+// USER
 Route::group(['prefix' => 'user'], function() {
 
 	Route::post('/login', ['uses' => 'AuthController@login']);
@@ -37,3 +39,9 @@ Route::group(['prefix' => 'user'], function() {
 	Route::post('/create', ['uses' => 'AuthController@createUser']);
 
 });
+
+
+// CATEGORIES
+Route::get('/categories', ['uses' => 'ProductController@getAllCategories']);
+
+Route::get('/category/{category}/{subcategory?}', ['uses' => 'ProductController@getProductsByCategory'])->where(['category' => '(.*)', 'subcategory' => '(.*)']);

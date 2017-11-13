@@ -7,4 +7,6 @@ export const url = {
 	searchAutocomplete: apiUrl + '/products/searchAutocomplete/',
 	login: apiUrl + '/user/login',
 	createUser: apiUrl + '/user/create',
+	category: apiUrl + '/category/',
+	getAllCategories: apiUrl + '/categories',
 }

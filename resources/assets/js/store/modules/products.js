@@ -49,20 +49,19 @@ export default {
   	},
   	getProduct({commit}, url) {
   		let havingProduct = Helpers.getItemById(this.state.products, 'downloadedProducts', url);
-
-			if(havingProduct) {
-				commit('set', { type: 'currentProduct', items: havingProduct })
-			} else {
-	  		axios.get(config.url.product + url)
-			    .then(response => {
-						const product = response.data.product;
-						commit('set', { type: 'currentProduct', items: product[0] })
-						commit('pushProducts', { type: 'downloadedProducts', key: url, items: product[0] })
-			    })
-			    .catch(e => {
-			      throw e
-			    })
-			}
+		if(havingProduct) {
+			commit('set', { type: 'currentProduct', items: havingProduct })
+		} else {
+  		axios.get(config.url.product + url)
+		    .then(response => {
+					const product = response.data.product;
+					commit('set', { type: 'currentProduct', items: product[0] })
+					commit('pushProducts', { type: 'downloadedProducts', key: url, items: product[0] })
+		    })
+		    .catch(e => {
+		      throw e
+		    })
+		}
   	}
   },
   mutations: {

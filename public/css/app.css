@@ -4543,7 +4543,11 @@ hr {
 }
 
 body {
-  background-image: url(/images/timber.png?4f0becc89d5fcf88c7815a7fb79beac0);
+  /*	background-image: url(../images/timber3.png);
+	background-image: url(../images/timber.png);*/
+  /*background-image: url(../images/timber7.jpg);*/
+  background-image: url(/images/timber4.jpg?28af7a17e699d5554346c6f46897365a);
+  /* perfect! */
 }
 
 #content {
@@ -4718,10 +4722,6 @@ body {
   padding: 10px 0;
 }
 
-nav {
-  height: 50px;
-}
-
 .header-search {
   padding: 10px 0;
   position: relative;
@@ -4745,6 +4745,7 @@ nav {
 
 .header-search .autocomplete {
   position: absolute;
+  z-index: 1;
   left: 0px;
   top: 40px;
   background: white;
@@ -4753,6 +4754,64 @@ nav {
 
 .header-right {
   padding-top: 20px;
+}
+
+nav {
+  font-size: 20px;
+  height: 50px;
+  line-height: 2;
+}
+
+.nav-category {
+  position: relative;
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.nav-category .nav-subcategories {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  left: -10px;
+  width: 400px;
+  background-color: white;
+  text-align: left;
+  font-size: 16px;
+  padding: 10px;
+  -webkit-box-shadow: 0px 2px 7px black;
+          box-shadow: 0px 2px 7px black;
+  border-radius: 5px;
+}
+
+.nav-category:hover .nav-subcategories {
+  display: block;
+  -webkit-backface-visibility: visible !important;
+          backface-visibility: visible !important;
+  -webkit-animation-name: flipInX;
+          animation-name: flipInX;
+  -webkit-animation-duration: .8s;
+          animation-duration: .8s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+}
+
+.nav-category > a {
+  padding-bottom: 10px;
+}
+
+.nav-category .nav-subcategories img {
+  max-width: 150px;
+}
+
+.products {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .product {
@@ -4790,6 +4849,11 @@ nav {
 
 .product-content .product-main-image img {
   width: 100%;
+}
+
+.product-content .product-price {
+  font-size: 20px;
+  color: #75af00;
 }
 
 .login-modal {

@@ -58,6 +58,7 @@ class AuthController extends Controller {
 		$user->email = $email;
 		$user->name = $name;
 		$user->password = $password;
+		$user->fake = 0;
 		$user->save();
 		Auth::login($user);
 
@@ -66,6 +67,35 @@ class AuthController extends Controller {
 			'statusCode' => (int)200,
 			'user' => $user
 		], 200);
+	}
+
+	public function checkAuth(Request $request) {
+		// if($request['token'] !== null) {
+		// 	// check in db
+		// 	// if isset and real - auth
+		// 	// return data like cart
+		// 	echo "token:" . $request->cookie('token');
+		// } else {
+			$token = 'temp.' . substr(md5($request->ip() . $request->header('User-Agent')), 0, -1);
+
+			$issetUser = DB::table('users')->where('token', $token)->count();
+			if(!$issetUser) {
+				$user = new User();
+				$user->email = 'temp-' . time();
+				$user->name = '';
+				$user->password = '';
+				$user->fake = 1;
+				$user->token = $token;
+				$user->save();
+			}
+
+			return response()->json([
+				'auth' => false,
+				'statusCode' => (int)200,
+				'token' => $token,
+				'user' => null
+			], 200);
+		// }
 	}
 
 }

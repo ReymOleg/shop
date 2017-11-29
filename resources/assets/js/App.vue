@@ -1,7 +1,8 @@
 <template>
   <div id="parent" class="wrapper">
     <div id="content" :class="classes.mainClasses">
-      <header class="container-fluid">
+      <!-- REMOVE CLICK CHECKAUTH() -->
+      <header class="container-fluid" @click="checkAuth()">
         <cart></cart>
         <div v-if="!isAuth" class="login-modal-block" :class="classes.loginModalClasses">
           <login-modal></login-modal>
@@ -90,7 +91,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      getAllCategories: 'categories/getAllCategories'
+      getAllCategories: 'categories/getAllCategories',
+      checkAuth: 'user/checkAuth'
     }),
     cartToggle() {
       this.classes.mainClasses['cart-opened'] = !this.classes.mainClasses['cart-opened']
@@ -100,6 +102,7 @@ export default {
     }
   },
   mounted() {
+    this.checkAuth()
     this.getAllCategories(this.$route.params)
   },
   watch: {

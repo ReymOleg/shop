@@ -4543,11 +4543,10 @@ hr {
 }
 
 body {
-  /*	background-image: url(../images/timber3.png);
-	background-image: url(../images/timber.png);*/
+  /*background-image: url(../images/timber3.png);*/
+  background-image: url(/images/timber.png?4f0becc89d5fcf88c7815a7fb79beac0);
   /*background-image: url(../images/timber7.jpg);*/
-  background-image: url(/images/timber4.jpg?28af7a17e699d5554346c6f46897365a);
-  /* perfect! */
+  /*background-image: url(../images/timber4.jpg);*/
 }
 
 #content {

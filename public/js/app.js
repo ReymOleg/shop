@@ -1759,6 +1759,7 @@ var url = {
 	// searchAutocomplete: apiUrl + 'products/search/', // returns not api result
 	searchAutocomplete: apiUrl + '/products/searchAutocomplete/',
 	login: apiUrl + '/user/login',
+	checkAuth: apiUrl + '/user/checkAuth',
 	createUser: apiUrl + '/user/create',
 	category: apiUrl + '/category/',
 	getAllCategories: apiUrl + '/categories'
@@ -12729,7 +12730,7 @@ var getItems = function getItems(state, key) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(16);
-module.exports = __webpack_require__(83);
+module.exports = __webpack_require__(85);
 
 
 /***/ }),
@@ -12743,8 +12744,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__App_vue__ = __webpack_require__(62);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__App_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__App_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__store__ = __webpack_require__(74);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios_retry__ = __webpack_require__(80);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios_retry___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_axios_retry__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_cookie__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_cookie___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_vue_cookie__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_axios_retry__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_axios_retry___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_axios_retry__);
 __webpack_require__(17);
 window.Vue = __webpack_require__(12);
 
@@ -12753,7 +12756,10 @@ window.Vue = __webpack_require__(12);
 
 
 
-__WEBPACK_IMPORTED_MODULE_4_axios_retry___default()(axios, { retries: 2 });
+Vue.use(__WEBPACK_IMPORTED_MODULE_4_vue_cookie___default.a);
+
+
+__WEBPACK_IMPORTED_MODULE_5_axios_retry___default()(axios, { retries: 2 });
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]);
 
@@ -44931,7 +44937,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     categories: 'categories/getAllCategories'
   })),
   methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({
-    getAllCategories: 'categories/getAllCategories'
+    getAllCategories: 'categories/getAllCategories',
+    checkAuth: 'user/checkAuth'
   }), {
     cartToggle: function cartToggle() {
       this.classes.mainClasses['cart-opened'] = !this.classes.mainClasses['cart-opened'];
@@ -44941,6 +44948,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }
   }),
   mounted: function mounted() {
+    this.checkAuth();
     this.getAllCategories(this.$route.params);
   },
 
@@ -45668,7 +45676,14 @@ var render = function() {
     _c("div", { class: _vm.classes.mainClasses, attrs: { id: "content" } }, [
       _c(
         "header",
-        { staticClass: "container-fluid" },
+        {
+          staticClass: "container-fluid",
+          on: {
+            click: function($event) {
+              _vm.checkAuth()
+            }
+          }
+        },
         [
           _c("cart"),
           _vm._v(" "),
@@ -47156,6 +47171,9 @@ return Promise$2;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_cookie__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_cookie___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_cookie__);
+
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -47177,8 +47195,27 @@ return Promise$2;
     }
   },
   actions: {
-    login: function login(_ref, data) {
+    checkAuth: function checkAuth(_ref, data) {
       var commit = _ref.commit;
+
+      axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].checkAuth, {
+        method: 'post',
+        data: {
+          token: __WEBPACK_IMPORTED_MODULE_1_vue_cookie___default.a.get('token')
+        }
+      }).then(function (response) {
+        if (response.data.token) {
+          // AuthController. Check user, then login or something like
+          __WEBPACK_IMPORTED_MODULE_1_vue_cookie___default.a.set('token', response.data.token, { expires: '1Y' });
+          commit('set', { type: 'userData', items: { token: response.data.token } });
+        }
+        console.log(1);
+      }).catch(function (e) {
+        throw e;
+      });
+    },
+    login: function login(_ref2, data) {
+      var commit = _ref2.commit;
 
       axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].login, {
         method: 'post',
@@ -47191,8 +47228,8 @@ return Promise$2;
         throw e;
       });
     },
-    create: function create(_ref2, data) {
-      var commit = _ref2.commit;
+    create: function create(_ref3, data) {
+      var commit = _ref3.commit;
 
       axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].createUser, {
         method: 'post',
@@ -47207,9 +47244,9 @@ return Promise$2;
     }
   },
   mutations: {
-    set: function set(state, _ref3) {
-      var type = _ref3.type,
-          items = _ref3.items;
+    set: function set(state, _ref4) {
+      var type = _ref4.type,
+          items = _ref4.items;
 
       state[type] = items;
     }
@@ -47305,10 +47342,223 @@ return Promise$2;
 /* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(81).default;
+(function () {
+    Number.isInteger = Number.isInteger || function (value) {
+        return typeof value === 'number' &&
+            isFinite(value) &&
+            Math.floor(value) === value;
+    };
+    var Cookie = __webpack_require__(81);
+
+    var VueCookie = {
+
+        install: function (Vue) {
+            Vue.prototype.$cookie = this;
+            Vue.cookie = this;
+        },
+        set: function (name, value, daysOrOptions) {
+            var opts = daysOrOptions;
+            if(Number.isInteger(daysOrOptions)) {
+                opts = {expires: daysOrOptions};
+            }
+            return Cookie.set(name, value, opts);
+        },
+
+        get: function (name) {
+            return Cookie.get(name);
+        },
+
+        delete: function (name, options) {
+            var opts = {expires: -1};
+            if(options !== undefined) {
+                opts = Object.assign(options, opts);
+            }
+            this.set(name, '', opts);
+        }
+    };
+
+    if (true) {
+        module.exports = VueCookie;
+    } else if (typeof define == "function" && define.amd) {
+        define([], function(){ return VueCookie; })
+    } else if (window.Vue) {
+        window.VueCookie = VueCookie;
+        Vue.use(VueCookie);
+    }
+
+})();
+
 
 /***/ }),
 /* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * tiny-cookie - A tiny cookie manipulation plugin
+ * https://github.com/Alex1990/tiny-cookie
+ * Under the MIT license | (c) Alex Chao
+ */
+
+!(function(root, factory) {
+
+  // Uses CommonJS, AMD or browser global to create a jQuery plugin.
+  // See: https://github.com/umdjs/umd
+  if (true) {
+    // Expose this plugin as an AMD module. Register an anonymous module.
+    !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else if (typeof exports === 'object') {
+    // Node/CommonJS module
+    module.exports = factory();
+  } else {
+    // Browser globals 
+    root.Cookie = factory();
+  }
+
+}(this, function() {
+
+  'use strict';
+
+  // The public function which can get/set/remove cookie.
+  function Cookie(key, value, opts) {
+    if (value === void 0) {
+      return Cookie.get(key);
+    } else if (value === null) {
+      Cookie.remove(key);
+    } else {
+      Cookie.set(key, value, opts);
+    }
+  }
+
+  // Check if the cookie is enabled.
+  Cookie.enabled = function() {
+    var key = '__test_key';
+    var enabled;
+
+    document.cookie = key + '=1';
+    enabled = !!document.cookie;
+
+    if (enabled) Cookie.remove(key);
+
+    return enabled;
+  };
+
+  // Get the cookie value by the key.
+  Cookie.get = function(key, raw) {
+    if (typeof key !== 'string' || !key) return null;
+
+    key = '(?:^|; )' + escapeRe(key) + '(?:=([^;]*?))?(?:;|$)';
+
+    var reKey = new RegExp(key);
+    var res = reKey.exec(document.cookie);
+
+    return res !== null ? (raw ? res[1] : decodeURIComponent(res[1])) : null;
+  };
+
+  // Get the cookie's value without decoding.
+  Cookie.getRaw = function(key) {
+    return Cookie.get(key, true);
+  };
+
+  // Set a cookie.
+  Cookie.set = function(key, value, raw, opts) {
+    if (raw !== true) {
+      opts = raw;
+      raw = false;
+    }
+    opts = opts ? convert(opts) : convert({});
+    var cookie = key + '=' + (raw ? value : encodeURIComponent(value)) + opts;
+    document.cookie = cookie;
+  };
+
+  // Set a cookie without encoding the value.
+  Cookie.setRaw = function(key, value, opts) {
+    Cookie.set(key, value, true, opts);
+  };
+
+  // Remove a cookie by the specified key.
+  Cookie.remove = function(key) {
+    Cookie.set(key, 'a', { expires: new Date() });
+  };
+
+  // Helper function
+  // ---------------
+
+  // Escape special characters.
+  function escapeRe(str) {
+    return str.replace(/[.*+?^$|[\](){}\\-]/g, '\\$&');
+  }
+
+  // Convert an object to a cookie option string.
+  function convert(opts) {
+    var res = '';
+
+    for (var p in opts) {
+      if (opts.hasOwnProperty(p)) {
+
+        if (p === 'expires') {
+          var expires = opts[p];
+          if (typeof expires !== 'object') {
+            expires += typeof expires === 'number' ? 'D' : '';
+            expires = computeExpires(expires);
+          }
+          opts[p] = expires.toUTCString();
+        }
+
+        if (p === 'secure') {
+          if (opts[p]) {
+            res += ';' + p;
+          }
+
+          continue;
+        }
+
+        res += ';' + p + '=' + opts[p];
+      }
+    }
+
+    if (!opts.hasOwnProperty('path')) {
+      res += ';path=/';
+    }
+
+    return res;
+  }
+
+  // Return a future date by the given string.
+  function computeExpires(str) {
+    var expires = new Date();
+    var lastCh = str.charAt(str.length - 1);
+    var value = parseInt(str, 10);
+
+    switch (lastCh) {
+      case 'Y': expires.setFullYear(expires.getFullYear() + value); break;
+      case 'M': expires.setMonth(expires.getMonth() + value); break;
+      case 'D': expires.setDate(expires.getDate() + value); break;
+      case 'h': expires.setHours(expires.getHours() + value); break;
+      case 'm': expires.setMinutes(expires.getMinutes() + value); break;
+      case 's': expires.setSeconds(expires.getSeconds() + value); break;
+      default: expires = new Date(str);
+    }
+
+    return expires;
+  }
+
+  return Cookie;
+
+}));
+
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(83).default;
+
+/***/ }),
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47323,7 +47573,7 @@ exports.isIdempotentRequestError = isIdempotentRequestError;
 exports.isNetworkOrIdempotentRequestError = isNetworkOrIdempotentRequestError;
 exports.default = axiosRetry;
 
-var _isRetryAllowed = __webpack_require__(82);
+var _isRetryAllowed = __webpack_require__(84);
 
 var _isRetryAllowed2 = _interopRequireDefault(_isRetryAllowed);
 
@@ -47517,7 +47767,7 @@ axiosRetry.isNetworkOrIdempotentRequestError = isNetworkOrIdempotentRequestError
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 82 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47584,7 +47834,7 @@ module.exports = function (err) {
 
 
 /***/ }),
-/* 83 */
+/* 85 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

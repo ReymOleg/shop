@@ -5,8 +5,12 @@ import routes from './routes.js'
 import App from './App.vue'
 import store from './store'
 
+import VueCookie from 'vue-cookie';
+Vue.use(VueCookie);
+
 import axiosRetry from 'axios-retry';
 axiosRetry(axios, { retries: 2 });
+
 
 Vue.use(VueRouter)
 

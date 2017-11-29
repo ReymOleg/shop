@@ -1,4 +1,5 @@
 import * as config from '../../config.js'
+import VueCookie from 'vue-cookie'
 
 export default {
   namespaced: true,
@@ -19,6 +20,25 @@ export default {
     },
   },
   actions: {
+    checkAuth: ({commit}, data) => {
+      axios(config.url.checkAuth, {
+          method: 'post',
+          data: {
+            token: VueCookie.get('token')
+          }
+        })
+        .then(response => {
+          if(response.data.token) {
+            // AuthController. Check user, then login or something like
+            VueCookie.set('token', response.data.token, { expires: '1Y' });
+            commit('set', { type: 'userData', items: {token: response.data.token} })
+          }
+          console.log(1);
+        })
+        .catch(e => {
+          throw e
+        })
+    },
     login: ({commit}, data) => {
       axios(config.url.login, {
           method: 'post',

@@ -38,6 +38,8 @@ Route::group(['prefix' => 'user'], function() {
 
 	Route::post('/create', ['uses' => 'AuthController@createUser']);
 
+	Route::post('/checkAuth', ['uses' => 'AuthController@checkAuth']);
+
 });
 
 

@@ -47231,8 +47231,7 @@ return Promise$2;
     auth: false,
     userData: {
       email: null,
-      name: null,
-      token: null
+      name: null
     }
   },
   getters: {
@@ -47253,14 +47252,15 @@ return Promise$2;
           token: __WEBPACK_IMPORTED_MODULE_1_vue_cookie___default.a.get('token')
         }
       }).then(function (response) {
-        var user = response.data.user;
-        if (user) {
+        var data = response.data;
+        if (data.auth) {
           commit('set', { type: 'auth', items: true });
-          commit('set', { type: 'userData', items: { email: user.email, name: user.name } });
         }
-        if (response.data.token) {
+        if (data.user) {
+          commit('set', { type: 'userData', items: { email: data.user.email, name: data.user.name } });
+        }
+        if (data.token) {
           __WEBPACK_IMPORTED_MODULE_1_vue_cookie___default.a.set('token', response.data.token, { expires: '1Y' });
-          // commit('set', { type: 'userData', items: {token: response.data.token} })
         }
       }).catch(function (e) {
         throw e;
@@ -47273,14 +47273,15 @@ return Promise$2;
         method: 'post',
         data: data
       }).then(function (response) {
-        var user = response.data.user;
-        if (user) {
+        var data = response.data;
+        if (data.auth) {
           commit('set', { type: 'auth', items: true });
-          commit('set', { type: 'userData', items: { email: user.email, name: user.name } });
         }
-        if (response.data.token) {
+        if (data.user) {
+          commit('set', { type: 'userData', items: { email: data.user.email, name: data.user.name } });
+        }
+        if (data.token) {
           __WEBPACK_IMPORTED_MODULE_1_vue_cookie___default.a.set('token', response.data.token, { expires: '1Y' });
-          // commit('set', { type: 'userData', items: {token: response.data.token} })
         }
       }).catch(function (e) {
         throw e;
@@ -47300,7 +47301,6 @@ return Promise$2;
         }
         if (response.data.token) {
           __WEBPACK_IMPORTED_MODULE_1_vue_cookie___default.a.set('token', response.data.token, { expires: '1Y' });
-          // commit('set', { type: 'userData', items: {token: response.data.token} })
         }
       }).catch(function (e) {
         throw e;

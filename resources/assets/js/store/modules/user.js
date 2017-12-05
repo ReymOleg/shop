@@ -7,8 +7,7 @@ export default {
     auth: false,
     userData: {
       email: null,
-      name: null,
-      token: null,
+      name: null
     },
   },
   getters: {
@@ -28,14 +27,15 @@ export default {
           }
         })
         .then(response => {
-          const user = response.data.user;
-          if(user) {
+          const data = response.data;
+          if(data.auth) {
             commit('set', { type: 'auth', items: true })
-            commit('set', { type: 'userData', items: {email: user.email, name: user.name} })
           }
-          if(response.data.token) {
+          if(data.user) {
+            commit('set', { type: 'userData', items: {email: data.user.email, name: data.user.name} })
+          }
+          if(data.token) {
             VueCookie.set('token', response.data.token, { expires: '1Y' });
-            // commit('set', { type: 'userData', items: {token: response.data.token} })
           }
         })
         .catch(e => {
@@ -48,14 +48,15 @@ export default {
           data: data,
         })
         .then(response => {
-          const user = response.data.user;
-          if(user) {
+          const data = response.data;
+          if(data.auth) {
             commit('set', { type: 'auth', items: true })
-            commit('set', { type: 'userData', items: {email: user.email, name: user.name} })
           }
-          if(response.data.token) {
+          if(data.user) {
+            commit('set', { type: 'userData', items: {email: data.user.email, name: data.user.name} })
+          }
+          if(data.token) {
             VueCookie.set('token', response.data.token, { expires: '1Y' });
-            // commit('set', { type: 'userData', items: {token: response.data.token} })
           }
         })
         .catch(e => {
@@ -75,7 +76,6 @@ export default {
           }
           if(response.data.token) {
             VueCookie.set('token', response.data.token, { expires: '1Y' });
-            // commit('set', { type: 'userData', items: {token: response.data.token} })
           }
         })
         .catch(e => {

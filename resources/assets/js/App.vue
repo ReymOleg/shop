@@ -1,8 +1,7 @@
 <template>
   <div id="parent" class="wrapper">
     <div id="content" :class="classes.mainClasses">
-      <!-- REMOVE CLICK CHECKAUTH() -->
-      <header class="container-fluid" @click="checkAuth()">
+      <header class="container-fluid">
         <cart></cart>
         <div v-if="!isAuth" class="login-modal-block" :class="classes.loginModalClasses">
           <login-modal></login-modal>
@@ -108,9 +107,14 @@ export default {
   watch: {
     'isAuth': {
       handler: function() {
-        console.log(this.isAuth)
+        // console.log(this.isAuth)
       }
-    }
+    },
+    'userData': {
+      handler: function() {
+        // console.log(this.userData)
+      }
+    },
   },
   name: 'app',
   components: { Search, Cart, LoginModal }

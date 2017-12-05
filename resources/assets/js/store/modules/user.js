@@ -28,12 +28,15 @@ export default {
           }
         })
         .then(response => {
-          if(response.data.token) {
-            // AuthController. Check user, then login or something like
-            VueCookie.set('token', response.data.token, { expires: '1Y' });
-            commit('set', { type: 'userData', items: {token: response.data.token} })
+          const user = response.data.user;
+          if(user) {
+            commit('set', { type: 'auth', items: true })
+            commit('set', { type: 'userData', items: {email: user.email, name: user.name} })
           }
-          console.log(1);
+          if(response.data.token) {
+            VueCookie.set('token', response.data.token, { expires: '1Y' });
+            // commit('set', { type: 'userData', items: {token: response.data.token} })
+          }
         })
         .catch(e => {
           throw e
@@ -46,8 +49,14 @@ export default {
         })
         .then(response => {
           const user = response.data.user;
-          commit('set', { type: 'auth', items: true })
-          commit('set', { type: 'userData', items: {email: user.email, name: user.name} })
+          if(user) {
+            commit('set', { type: 'auth', items: true })
+            commit('set', { type: 'userData', items: {email: user.email, name: user.name} })
+          }
+          if(response.data.token) {
+            VueCookie.set('token', response.data.token, { expires: '1Y' });
+            // commit('set', { type: 'userData', items: {token: response.data.token} })
+          }
         })
         .catch(e => {
           throw e
@@ -60,8 +69,14 @@ export default {
         })
         .then(response => {
           const user = response.data.user;
-          commit('set', { type: 'auth', items: true })
-          commit('set', { type: 'userData', items: {email: user.email, name: user.name} })
+          if(user) {
+            commit('set', { type: 'auth', items: true })
+            commit('set', { type: 'userData', items: {email: user.email, name: user.name} })
+          }
+          if(response.data.token) {
+            VueCookie.set('token', response.data.token, { expires: '1Y' });
+            // commit('set', { type: 'userData', items: {token: response.data.token} })
+          }
         })
         .catch(e => {
           throw e

@@ -10,4 +10,7 @@ export const url = {
 	createUser: apiUrl + '/user/create',
 	category: apiUrl + '/category/',
 	getAllCategories: apiUrl + '/categories',
+	getCart: apiUrl + '/cart',
+	addToCart: apiUrl + '/cart/add',
+	deleteFromCart: apiUrl + '/cart/delete',
 }

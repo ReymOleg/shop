@@ -4649,6 +4649,16 @@ body {
   cursor: pointer;
 }
 
+.btn-transparent {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
+.red {
+  color: red;
+}
+
 .cart-container {
   position: fixed;
   right: -315px;
@@ -4943,5 +4953,41 @@ nav {
           animation-duration: .8s;
   -webkit-animation-fill-mode: both;
           animation-fill-mode: both;
+}
+
+.cart-image,
+.cart-props,
+.cart-actions {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.cart-item {
+  margin-bottom: 10px;
+  background: #fafafa;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.cart-image {
+  width: 20%;
+}
+
+.cart-image img {
+  max-width: 100%;
+}
+
+.cart-props {
+  width: 67%;
+}
+
+.cart-actions {
+  width: 5%;
+  float: right;
+  margin-right: 3%;
+}
+
+.pull-right {
+  float: right;
 }
 

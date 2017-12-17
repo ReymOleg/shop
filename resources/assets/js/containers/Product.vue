@@ -8,7 +8,8 @@
 			</div>
 			<div class="col-xs-6">
 				<h1 class="no-margin">{{ product.title }}</h1>
-				<p class="product-price">{{ product.price }} рублей</p>
+				<p class="product-price">{{ product.price }} руб.</p>
+				<button @click="addToCart(product.id)" class="button primary">В корзину</button>
 				<p>{{ product.description }}</p>
 			</div>
 		</div>
@@ -32,8 +33,9 @@ import { mapActions } from 'vuex'
 		},
 		methods: {
 			...mapActions({
-				getProduct: 'products/getProduct'
-			})
+				getProduct: 'products/getProduct',
+				addToCart: 'products/addToCart'
+			}),
 		},
 		mounted() {
 			this.getProduct(this.$route.params[0])

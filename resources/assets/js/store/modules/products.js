@@ -8,7 +8,7 @@ export default {
 		searchAutocomplete: [],
 		currentProduct: {},
 		downloadedProducts: {},
-		cart: [],
+		cart: {},
 	},
   getters: {
     getMainProducts: (state, getters, rootState, rootGetters) => {
@@ -19,6 +19,9 @@ export default {
     },
     getProductOfUrl: (state, getters, rootState, rootGetters) => {
   		return state.currentProduct || {}
+  	},
+  	cart: (state, getters, rootState, rootGetters) => {
+  		return state.cart || {}
   	}
   },
   actions: {
@@ -62,7 +65,47 @@ export default {
 		      throw e
 		    })
 		}
-  	}
+  	},
+  	getCart({commit}) {
+  		axios.get(config.url.getCart)
+		    .then(response => {
+				const cart = response.data.cart;
+				commit('set', { type: 'cart', items: cart })
+		    })
+		    .catch(e => {
+		      throw e
+		    })
+  	},
+  	addToCart({commit}, productId) {
+	  	axios(config.url.addToCart, {
+          method: 'post',
+          data: {
+          	product_id: productId
+          }
+        })
+	    .then(response => {
+			const cart = response.data.cart;
+			commit('set', { type: 'cart', items: cart })
+	    })
+	    .catch(e => {
+	      throw e
+	    })
+  	},
+  	deleteFromCart({commit}, cartId) {
+	  	axios(config.url.deleteFromCart, {
+          method: 'post',
+          data: {
+          	cart_id: cartId
+          }
+        })
+	    .then(response => {
+			const cart = response.data.cart;
+			commit('set', { type: 'cart', items: cart })
+	    })
+	    .catch(e => {
+	      throw e
+	    })
+  	},
   },
   mutations: {
 		set(state, { type, items }) {

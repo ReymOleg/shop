@@ -18,6 +18,8 @@ class AuthController extends Controller {
 
 	private $response = [];
 
+	private $salt = 'ztzCp4xed0986tG9fakmb9sNbZG0G95y6LNHGpfctGo';
+
 	public function __construct(Request $request) {
 		$this->token = $request->cookie('token');
 
@@ -30,11 +32,11 @@ class AuthController extends Controller {
 	}
 
 	public function generateTempToken(Request $request) {
-		return 'temp.' . substr(md5('ztzCp4xed0986tG9fakmb9sNbZG0G95y6LNHGpfctGo' . $request->ip() . $request->header('User-Agent')), 0, -1);
+		return 'temp.' . substr(md5($this->salt . $request->ip() . $request->header('User-Agent')), 0, -1);
 	}
 
 	public function generateToken(Request $request) {
-		return substr(md5('ztzCp4xed0986tG9fakmb9sNbZG0G95y6LNHGpfctGo' . Auth::user()->email . Auth::user()->id), 0, -1);
+		return substr(md5($this->salt . Auth::user()->email . Auth::user()->id), 0, -1);
 	}
 
 

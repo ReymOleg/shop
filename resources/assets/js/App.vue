@@ -26,7 +26,7 @@
               </div>
               <div class="col-xs-6 pointer">
                 <div @click="cartToggle()">
-                  <i class="fa fa-shopping-cart" aria-hidden="true"></i> Корзина (0)
+                  <i class="fa fa-shopping-cart" aria-hidden="true"></i> Корзина (<span>{{ cart.length || 0 }}</span>)
                 </div>
               </div>
             </div>
@@ -85,13 +85,15 @@ export default {
     ...mapGetters({
       isAuth: 'user/isAuth',
       userData: 'user/userData',
-      categories: 'categories/getAllCategories'
+      categories: 'categories/getAllCategories',
+      cart: 'products/cart'
     })
   },
   methods: {
     ...mapActions({
       getAllCategories: 'categories/getAllCategories',
-      checkAuth: 'user/checkAuth'
+      checkAuth: 'user/checkAuth',
+      getCart: 'products/getCart'
     }),
     cartToggle() {
       this.classes.mainClasses['cart-opened'] = !this.classes.mainClasses['cart-opened']
@@ -102,20 +104,21 @@ export default {
   },
   mounted() {
     this.checkAuth()
+    this.getCart()
     this.getAllCategories(this.$route.params)
   },
-  watch: {
-    'isAuth': {
-      handler: function() {
-        // console.log(this.isAuth)
-      }
-    },
-    'userData': {
-      handler: function() {
-        // console.log(this.userData)
-      }
-    },
-  },
+  // watch: {
+  //   'isAuth': {
+  //     handler: function() {
+  //       // console.log(this.isAuth)
+  //     }
+  //   },
+  //   'userData': {
+  //     handler: function() {
+  //       // console.log(this.userData)
+  //     }
+  //   },
+  // },
   name: 'app',
   components: { Search, Cart, LoginModal }
 }

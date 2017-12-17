@@ -38,25 +38,25 @@ export default {
   		}
   	},
   	getProductsByCategory({commit}, url) {
-        let havingProducts = Helpers.getItemById(this.state.categories, 'catDownloadedProducts', url);
-		let havingCategories = Helpers.getItemById(this.state.categories, 'catDownloadedCategories', url);
-		if(havingProducts && havingCategories) {
+      let havingProducts = Helpers.getItemById(this.state.categories, 'catDownloadedProducts', url);
+  		let havingCategories = Helpers.getItemById(this.state.categories, 'catDownloadedCategories', url);
+  		if(havingProducts && havingCategories) {
             commit('set', { type: 'catCurrentProducts', items: havingProducts })
             commit('set', { type: 'catCurrentCategory', items: havingCategories })
-        } else {
-        axios.get(config.url.category + url)
+          } else {
+          axios.get(config.url.category + url)
             .then(response => {
-                    const products = response.data.products;
-                    const categories = response.data.categories;
-                    commit('set', { type: 'catCurrentProducts', items: products })
-                    commit('set', { type: 'catCurrentCategory', items: categories })
-                    commit('push', { type: 'catDownloadedProducts', key: url, items: products })
-					commit('push', { type: 'catDownloadedCategories', key: url, items: categories })
-		    })
-		    .catch(e => {
-		      throw e
-		    })
-		}
+              const products = response.data.products;
+              const categories = response.data.categories;
+              commit('set', { type: 'catCurrentProducts', items: products })
+              commit('set', { type: 'catCurrentCategory', items: categories })
+              commit('push', { type: 'catDownloadedProducts', key: url, items: products })
+              commit('push', { type: 'catDownloadedCategories', key: url, items: categories })
+  		    })
+  		    .catch(e => {
+  		      throw e
+  		    })
+  		}
   	}
   },
   mutations: {

@@ -1,12 +1,12 @@
 <template>
 	<div class="products">
 		<div class="product-content" v-show="visible">
-			<div class="col-xs-6">
+			<div class="col-xs-12 col-sm-6">
 				<div class="product-main-image">
 					<img :src="/img/ + product.image">
 				</div>
 			</div>
-			<div class="col-xs-6">
+			<div class="col-xs-12 col-sm-6">
 				<h1 class="no-margin">{{ product.title }}</h1>
 				<p class="product-price">{{ product.price }} руб.</p>
 				<button @click="addToCart(product.id)" class="button primary">В корзину</button>

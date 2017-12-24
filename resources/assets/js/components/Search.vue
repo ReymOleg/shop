@@ -1,7 +1,7 @@
 <template>
 	<div class="header-search">
 		<input
-			class="col-xs-10"
+			class="col-sm-10 col-xs-8"
 			type="text"
 			v-model="query"
 			@input="search()"
@@ -9,7 +9,7 @@
 			@blur="hide()"
 			placeholder="Поиск..."
 		>
-		<button class="col-xs-2 search-button" type="submit">
+		<button class="col-sm-2 col-xs-4 search-button" type="submit">
 			<i class="fa fa-search" aria-hidden="true"></i>
 		</button>
 		<div class="autocomplete" v-if="visible && query">

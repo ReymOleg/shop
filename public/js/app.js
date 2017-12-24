@@ -44645,13 +44645,13 @@ var render = function() {
         staticClass: "product-content"
       },
       [
-        _c("div", { staticClass: "col-xs-6" }, [
+        _c("div", { staticClass: "col-xs-12 col-sm-6" }, [
           _c("div", { staticClass: "product-main-image" }, [
             _c("img", { attrs: { src: /img/ + _vm.product.image } })
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-xs-6" }, [
+        _c("div", { staticClass: "col-xs-12 col-sm-6" }, [
           _c("h1", { staticClass: "no-margin" }, [
             _vm._v(_vm._s(_vm.product.title))
           ]),
@@ -44978,6 +44978,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -44991,6 +44995,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       classes: {
         mainClasses: {
           'cart-opened': false
+        },
+        menuClasses: {
+          'active': false
         },
         loginModalClasses: {
           'active': false,
@@ -45016,6 +45023,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     },
     toggleLoginModal: function toggleLoginModal() {
       this.classes.loginModalClasses['active'] = !this.classes.loginModalClasses['active'];
+    },
+    menuToggle: function menuToggle() {
+      this.classes.menuClasses['active'] = !this.classes.menuClasses['active'];
     }
   }),
   mounted: function mounted() {
@@ -45168,7 +45178,7 @@ var render = function() {
           expression: "query"
         }
       ],
-      staticClass: "col-xs-10",
+      staticClass: "col-sm-10 col-xs-8",
       attrs: { type: "text", placeholder: "Поиск..." },
       domProps: { value: _vm.query },
       on: {
@@ -45222,7 +45232,10 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "button",
-      { staticClass: "col-xs-2 search-button", attrs: { type: "submit" } },
+      {
+        staticClass: "col-sm-2 col-xs-4 search-button",
+        attrs: { type: "submit" }
+      },
       [
         _c("i", {
           staticClass: "fa fa-search",
@@ -45914,21 +45927,45 @@ var render = function() {
           _c("div", { staticClass: "row top-header" }, [
             _c(
               "div",
-              { staticClass: "header-logo col-xs-4" },
-              [_c("router-link", { attrs: { to: "/" } }, [_vm._v("LOGO")])],
+              { staticClass: "header-logo col-xs-2 col-sm-4" },
+              [
+                _c(
+                  "router-link",
+                  { staticClass: "logo-link", attrs: { to: "/" } },
+                  [_vm._v("LOGO")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "menu-toggle",
+                    on: {
+                      click: function($event) {
+                        _vm.menuToggle()
+                      }
+                    }
+                  },
+                  [
+                    _c("i", {
+                      staticClass: "fa fa-bars",
+                      attrs: { "aria-hidden": "true" }
+                    })
+                  ]
+                )
+              ],
               1
             ),
             _vm._v(" "),
             _c(
               "div",
-              { staticClass: "header-center col-xs-4" },
+              { staticClass: "header-center col-xs-6 col-sm-4" },
               [_c("search")],
               1
             ),
             _vm._v(" "),
-            _c("div", { staticClass: "header-right col-xs-4" }, [
+            _c("div", { staticClass: "header-right col-xs-4 col-sm-4" }, [
               _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col-xs-6" }, [
+                _c("div", { staticClass: "col-xs-4" }, [
                   !_vm.isAuth
                     ? _c(
                         "div",
@@ -45945,7 +45982,10 @@ var render = function() {
                             staticClass: "fa fa-user",
                             attrs: { "aria-hidden": "true" }
                           }),
-                          _vm._v(" Войти\n              ")
+                          _vm._v(" "),
+                          _c("span", { staticClass: "hidden-xs" }, [
+                            _vm._v("Войти")
+                          ])
                         ]
                       )
                     : _c("div", [
@@ -45953,13 +45993,14 @@ var render = function() {
                           staticClass: "fa fa-user",
                           attrs: { "aria-hidden": "true" }
                         }),
-                        _vm._v(
-                          " " + _vm._s(_vm.userData.name) + "\n              "
-                        )
+                        _vm._v(" "),
+                        _c("span", { staticClass: "hidden-xs" }, [
+                          _vm._v(_vm._s(_vm.userData.name))
+                        ])
                       ])
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "col-xs-6 pointer" }, [
+                _c("div", { staticClass: "col-xs-8 pointer" }, [
                   _c(
                     "div",
                     {
@@ -45974,7 +46015,11 @@ var render = function() {
                         staticClass: "fa fa-shopping-cart",
                         attrs: { "aria-hidden": "true" }
                       }),
-                      _vm._v(" Корзина ("),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "hidden-xs" }, [
+                        _vm._v("Корзина")
+                      ]),
+                      _vm._v(" ("),
                       _c("span", [_vm._v(_vm._s(_vm.cart.length || 0))]),
                       _vm._v(")\n              ")
                     ]
@@ -45986,60 +46031,100 @@ var render = function() {
           _vm._v(" "),
           _c(
             "nav",
-            { staticClass: "container-fluid center" },
-            _vm._l(_vm.categories, function(parentCategory) {
-              return _vm.categories
-                ? _c(
-                    "div",
-                    { staticClass: "nav-category" },
-                    [
-                      _c(
-                        "router-link",
-                        {
-                          key: "parentCategory.url",
-                          attrs: { to: "/category/" + parentCategory.url }
-                        },
-                        [_vm._v(_vm._s(parentCategory.name))]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "nav-subcategories" }, [
+            {
+              staticClass: "container-fluid center",
+              class: _vm.classes.menuClasses
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "nav-category" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      key: "home",
+                      staticClass: "hidden-home",
+                      attrs: { to: "/" },
+                      on: {
+                        click: function($event) {
+                          _vm.menuToggle()
+                        }
+                      }
+                    },
+                    [_vm._v("Главная")]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _vm._l(_vm.categories, function(parentCategory) {
+                return _vm.categories
+                  ? _c(
+                      "div",
+                      {
+                        staticClass: "nav-category",
+                        on: {
+                          click: function($event) {
+                            _vm.menuToggle()
+                          }
+                        }
+                      },
+                      [
                         _c(
-                          "div",
-                          { staticClass: "col-xs-6" },
-                          _vm._l(parentCategory.subcategories, function(
-                            subcategory
-                          ) {
-                            return _c(
-                              "router-link",
-                              {
-                                key: "subcategory.url",
-                                staticClass: "block",
-                                attrs: {
-                                  to:
-                                    "/category/" +
-                                    parentCategory.url +
-                                    "/" +
-                                    subcategory.url
-                                }
-                              },
-                              [_vm._v(_vm._s(subcategory.name))]
-                            )
-                          })
+                          "router-link",
+                          {
+                            key: "parentCategory.url",
+                            attrs: { to: "/category/" + parentCategory.url }
+                          },
+                          [_vm._v(_vm._s(parentCategory.name))]
                         ),
                         _vm._v(" "),
-                        _c("div", { staticClass: "col-xs-6" }, [
-                          _c("div", { staticClass: "block" }, [
-                            _c("img", {
-                              attrs: { src: /img/ + parentCategory.image }
+                        _c("div", { staticClass: "nav-subcategories" }, [
+                          _c(
+                            "div",
+                            { staticClass: "col-xs-8 col-sm-6" },
+                            _vm._l(parentCategory.subcategories, function(
+                              subcategory
+                            ) {
+                              return _c(
+                                "router-link",
+                                {
+                                  key: "subcategory.url",
+                                  staticClass: "block",
+                                  attrs: {
+                                    to:
+                                      "/category/" +
+                                      parentCategory.url +
+                                      "/" +
+                                      subcategory.url
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.menuToggle()
+                                    }
+                                  }
+                                },
+                                [_vm._v(_vm._s(subcategory.name))]
+                              )
                             })
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "col-xs-4 col-sm-6" }, [
+                            _c("div", { staticClass: "block" }, [
+                              _c("img", {
+                                attrs: { src: /img/ + parentCategory.image }
+                              })
+                            ])
                           ])
                         ])
-                      ])
-                    ],
-                    1
-                  )
-                : _vm._e()
-            })
+                      ],
+                      1
+                    )
+                  : _vm._e()
+              })
+            ],
+            2
           )
         ],
         1

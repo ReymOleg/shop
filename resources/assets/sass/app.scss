@@ -2,7 +2,7 @@
 @import "variables";
 
 // Bootstrap
-// @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap";
 
 // Bootstrap grids
 @import "grids";
@@ -12,3 +12,6 @@
 
 // Main styles
 @import "styles";
+
+// Responsive styles
+@import "responsive";

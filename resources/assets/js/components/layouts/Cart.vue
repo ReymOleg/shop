@@ -3,12 +3,12 @@
 		<div class="cart-entity">
 			<div class="cart-products">
 				<div class="cart-item" v-for="(item, index) in cart" :key="index">
-					<div class="cart-image">
+					<div class="cart-image" @click="cartClose()">
 						<router-link :to="{path: '/product/' + item.url }">
 							<img :src="/img/ + item.image">
 						</router-link>
 					</div>
-					<div class="cart-props">
+					<div class="cart-props"  @click="cartClose()">
 						<router-link :to="{path: '/product/' + item.url }">
 							<p class="no-margin">{{ item.title }}</p>
 						</router-link>
@@ -22,11 +22,11 @@
 				</div>
 				<div v-if="cart.length">
 					<hr>
-					<div class="pull-left">
-						Оформить заказ
-					</div>
-					<div class="pull-right">
-						Итого: {{ total }} руб.
+					<div class="pull-right text-right">
+						<span>Итого: {{ total }} руб.</span>
+						<span @click="cartClose()">
+							<router-link :to="'/checkout/'" class="btn btn-primary">Оформить заказ</router-link>
+						</span>
 					</div>
 				</div>
 				<div v-else>
@@ -62,7 +62,13 @@ import { mapActions } from 'vuex'
 		methods: {
 			...mapActions({
 				deleteFromCart: 'products/deleteFromCart'
-			})
+			}),
+			cartClose() {
+				this.$options.parent.cartClose()
+				// console.log(this);
+				// this.props.cartClose();
+				// this.$parent.$options.methods.cartClose()
+			}
 		},
 		watch: {
 			'cart': {

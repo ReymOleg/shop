@@ -2,7 +2,7 @@
   <div id="parent" class="wrapper">
     <div id="content" :class="classes.mainClasses">
       <header class="container-fluid">
-        <cart></cart>
+        <cart cartClose="cartClose()"></cart>
         <div id="cart-overlay" @click="cartClose"></div>
         <div v-if="!isAuth" class="login-modal-block" :class="classes.loginModalClasses">
           <login-modal></login-modal>

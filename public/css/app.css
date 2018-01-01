@@ -13403,7 +13403,7 @@ nav {
   display: block;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 1000px) {
   nav {
     position: fixed;
     left: 0;

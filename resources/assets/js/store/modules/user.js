@@ -81,7 +81,24 @@ export default {
         .catch(e => {
           throw e
         })
-    }
+    },
+    logout: ({commit}, data) => {
+      axios(config.url.logout, {
+          method: 'post',
+          data: data,
+        })
+        .then(response => {
+          const data = response.data;
+          commit('set', { type: 'auth', items: false })
+          commit('set', { type: 'userData', items: {email: null, name: null} })
+          if(data.token) {
+            VueCookie.set('token', response.data.token, { expires: '1Y' });
+          }
+        })
+        .catch(e => {
+          throw e
+        })
+    },
   },
   mutations: {
     set(state, { type, items }) {

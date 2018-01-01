@@ -22,6 +22,9 @@
 				</div>
 				<div v-if="cart.length">
 					<hr>
+					<div class="pull-left">
+						Оформить заказ
+					</div>
 					<div class="pull-right">
 						Итого: {{ total }} руб.
 					</div>

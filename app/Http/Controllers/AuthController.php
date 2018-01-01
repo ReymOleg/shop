@@ -99,9 +99,14 @@ class AuthController extends Controller {
 		return response()->json($this->response, $this->response['statusCode']);
 	}
 
-	public function logout() {
+	public function logout(Request $request) {
 		Auth::logout();
-		return redirect()->route('login');
+
+		$this->response['auth'] = false;
+		$this->response['user'] = null;
+		$this->response['token'] = $this->generateTempToken($request);
+
+		return response()->json($this->response, $this->response['statusCode']);
 	}
 
 	public function createUser(Request $request) {

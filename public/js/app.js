@@ -1759,6 +1759,7 @@ var url = {
 	// searchAutocomplete: apiUrl + 'products/search/', // returns not api result
 	searchAutocomplete: apiUrl + '/products/searchAutocomplete/',
 	login: apiUrl + '/user/login',
+	logout: apiUrl + '/user/logout',
 	checkAuth: apiUrl + '/user/checkAuth',
 	createUser: apiUrl + '/user/create',
 	category: apiUrl + '/category/',
@@ -12818,43 +12819,59 @@ __WEBPACK_IMPORTED_MODULE_5_axios_retry___default()(axios, { retries: 2 });
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]);
 
 var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
-				routes: __WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* default */],
-				mode: 'history'
+		routes: __WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* default */],
+		mode: 'history'
+});
+
+Vue.directive('click-outside', {
+		bind: function bind(el, binding, vnode) {
+				el.event = function (event) {
+						// here I check that click was outside the el and his childrens
+						if (!(el == event.target || el.contains(event.target))) {
+								// and if it did, call method provided in attribute value
+								vnode.context[binding.expression](event);
+						}
+				};
+				document.body.addEventListener('click', el.event);
+		},
+		unbind: function unbind(el) {
+				document.body.removeEventListener('click', el.event);
+		}
 });
 
 var app = new Vue({
-				el: '#app',
-				render: function render(h) {
-								return h(__WEBPACK_IMPORTED_MODULE_2__App_vue___default.a);
-				},
-				store: __WEBPACK_IMPORTED_MODULE_3__store__["a" /* default */],
-				router: router
-				//    data: {
-				// 	user: false
-				// },
-				// methods: {
-				// 	checkIfLogged(){
-				//         return new Promise((resolve, reject) => {
-				//           axios.get('/api/sessionStatus')
-				//              .then(response => {
-				//                 resolve(response.data.user);
-				//              })
-				//              .catch(error => {
-				//                 reject(error.response.data);
-				//              });
-				//         }) 
-				//     }
-				// },
-				//    created(){
-				// 	this.checkIfLogged()
-				// 		.then(response => {
-				// 			console.log(response)
-				// 			this.user = response ? response : false;
-				// 		})                    
-				// 		.catch(error => {
-				// 			console.log(error)
-				// 		});
-				//    }
+		el: '#app',
+		render: function render(h) {
+				return h(__WEBPACK_IMPORTED_MODULE_2__App_vue___default.a);
+		},
+		store: __WEBPACK_IMPORTED_MODULE_3__store__["a" /* default */],
+		router: router
+		//    data: {
+		// 	user: false
+		// },
+		// methods: {
+		// 	checkIfLogged(){
+		//         return new Promise((resolve, reject) => {
+		//           axios.get('/api/sessionStatus')
+		//              .then(response => {
+		//                 resolve(response.data.user);
+		//              })
+		//              .catch(error => {
+		//                 reject(error.response.data);
+		//              });
+		//         }) 
+		//     }
+		// },
+		//    created(){
+		// 	this.checkIfLogged()
+		// 		.then(response => {
+		// 			console.log(response)
+		// 			this.user = response ? response : false;
+		// 		})                    
+		// 		.catch(error => {
+		// 			console.log(error)
+		// 		});
+		//    }
 });
 
 /***/ }),
@@ -44982,6 +44999,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -45002,6 +45026,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         loginModalClasses: {
           'active': false,
           'modal-active': false
+        },
+        loggedMenuClasses: {
+          'active': false
         }
       }
     };
@@ -45016,16 +45043,29 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({
     getAllCategories: 'categories/getAllCategories',
     checkAuth: 'user/checkAuth',
-    getCart: 'products/getCart'
+    getCart: 'products/getCart',
+    logout: 'user/logout'
   }), {
     cartToggle: function cartToggle() {
       this.classes.mainClasses['cart-opened'] = !this.classes.mainClasses['cart-opened'];
+    },
+    cartClose: function cartClose() {
+      this.classes.mainClasses['cart-opened'] = false;
     },
     toggleLoginModal: function toggleLoginModal() {
       this.classes.loginModalClasses['active'] = !this.classes.loginModalClasses['active'];
     },
     menuToggle: function menuToggle() {
       this.classes.menuClasses['active'] = !this.classes.menuClasses['active'];
+    },
+    menuClose: function menuClose() {
+      this.classes.menuClasses['active'] = false;
+    },
+    loggedMenuToggle: function loggedMenuToggle(e, param) {
+      this.classes.loggedMenuClasses['active'] = !this.classes.loggedMenuClasses['active'];
+    },
+    loggedMenuClose: function loggedMenuClose() {
+      this.classes.loggedMenuClasses['active'] = false;
     }
   }),
   mounted: function mounted() {
@@ -45347,6 +45387,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
 
 
 
@@ -45460,6 +45503,10 @@ var render = function() {
           _vm.cart.length
             ? _c("div", [
                 _c("hr"),
+                _vm._v(" "),
+                _c("div", { staticClass: "pull-left" }, [
+                  _vm._v("\n\t\t\t\t\tОформить заказ\n\t\t\t\t")
+                ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "pull-right" }, [
                   _vm._v(
@@ -45745,6 +45792,15 @@ var render = function() {
             on: {
               click: function($event) {
                 _vm.loginUser()
+              },
+              keyup: function($event) {
+                if (
+                  !("button" in $event) &&
+                  _vm._k($event.keyCode, "enter", 13, $event.key)
+                ) {
+                  return null
+                }
+                _vm.loginUser()
               }
             }
           },
@@ -45866,6 +45922,15 @@ var render = function() {
             on: {
               click: function($event) {
                 _vm.createUser()
+              },
+              keyup: function($event) {
+                if (
+                  !("button" in $event) &&
+                  _vm._k($event.keyCode, "enter", 13, $event.key)
+                ) {
+                  return null
+                }
+                _vm.createUser()
               }
             }
           },
@@ -45900,6 +45965,11 @@ var render = function() {
         { staticClass: "container-fluid" },
         [
           _c("cart"),
+          _vm._v(" "),
+          _c("div", {
+            attrs: { id: "cart-overlay" },
+            on: { click: _vm.cartClose }
+          }),
           _vm._v(" "),
           !_vm.isAuth
             ? _c(
@@ -45989,14 +46059,61 @@ var render = function() {
                         ]
                       )
                     : _c("div", [
-                        _c("i", {
-                          staticClass: "fa fa-user",
-                          attrs: { "aria-hidden": "true" }
-                        }),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "hidden-xs" }, [
-                          _vm._v(_vm._s(_vm.userData.name))
-                        ])
+                        _c(
+                          "div",
+                          {
+                            directives: [
+                              {
+                                name: "click-outside",
+                                rawName: "v-click-outside",
+                                value: _vm.loggedMenuClose,
+                                expression: "loggedMenuClose"
+                              }
+                            ],
+                            staticClass: "logged-user",
+                            on: {
+                              click: function($event) {
+                                _vm.loggedMenuToggle()
+                              }
+                            }
+                          },
+                          [
+                            _c("i", {
+                              staticClass: "fa fa-user",
+                              attrs: { "aria-hidden": "true" }
+                            }),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "hidden-xs" }, [
+                              _vm._v(_vm._s(_vm.userData.name))
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass: "logged-menu",
+                                class: _vm.classes.loggedMenuClasses
+                              },
+                              [
+                                _c("div", { staticClass: "orders" }, [
+                                  _vm._v("Мои заказы")
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "logout",
+                                    on: {
+                                      click: function($event) {
+                                        _vm.logout()
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Выйти")]
+                                )
+                              ]
+                            )
+                          ]
+                        )
                       ])
                 ]),
                 _vm._v(" "),
@@ -46038,19 +46155,21 @@ var render = function() {
             [
               _c(
                 "div",
-                { staticClass: "nav-category" },
+                {
+                  staticClass: "nav-category",
+                  on: {
+                    click: function($event) {
+                      _vm.menuClose()
+                    }
+                  }
+                },
                 [
                   _c(
                     "router-link",
                     {
                       key: "home",
                       staticClass: "hidden-home",
-                      attrs: { to: "/" },
-                      on: {
-                        click: function($event) {
-                          _vm.menuToggle()
-                        }
-                      }
+                      attrs: { to: "/" }
                     },
                     [_vm._v("Главная")]
                   )
@@ -47587,12 +47706,29 @@ return Promise$2;
       }).catch(function (e) {
         throw e;
       });
+    },
+    logout: function logout(_ref4, data) {
+      var commit = _ref4.commit;
+
+      axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].logout, {
+        method: 'post',
+        data: data
+      }).then(function (response) {
+        var data = response.data;
+        commit('set', { type: 'auth', items: false });
+        commit('set', { type: 'userData', items: { email: null, name: null } });
+        if (data.token) {
+          __WEBPACK_IMPORTED_MODULE_1_vue_cookie___default.a.set('token', response.data.token, { expires: '1Y' });
+        }
+      }).catch(function (e) {
+        throw e;
+      });
     }
   },
   mutations: {
-    set: function set(state, _ref4) {
-      var type = _ref4.type,
-          items = _ref4.items;
+    set: function set(state, _ref5) {
+      var type = _ref5.type,
+          items = _ref5.items;
 
       state[type] = items;
     }

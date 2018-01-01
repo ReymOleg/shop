@@ -7,6 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Laravel</title>
         <link rel="stylesheet" type="text/css" href="{{ asset('/css/app.css') }}">
+        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
         <link href="{{ asset('/fonts/Neucha.ttf') }}" rel="fonts">
     </head>
     <body>

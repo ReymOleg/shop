@@ -13,42 +13,48 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::group(['middleware' => ['throttle:300']], function() {
 
-Route::get('/sessionStatus', function() {
-    return ['user' => Auth::user() ? Auth::user()->load('profile') : null];
-});
+	Route::middleware('auth:api')->get('/user', function (Request $request) {
+	    return $request->user();
+	});
 
-// PRODUCTS
-Route::group(['prefix' => 'products'], function() {
-	Route::get('/', ['uses' => 'ProductController@getMainProducts']);
-	Route::get('/searchAutocomplete/{query?}', ['uses' => 'ProductController@searchAutocomplete'])->where('query', '(.*)');
-});
-Route::get('/product/{url}', ['uses' => 'ProductController@getProduct'])->where('url', '(.*)');
+	Route::get('/sessionStatus', function() {
+	    return ['user' => Auth::user() ? Auth::user()->load('profile') : null];
+	});
 
-// USER
-Route::group(['prefix' => 'user'], function() {
+	// PRODUCTS
+	Route::group(['prefix' => 'products'], function() {
+		Route::get('/', ['uses' => 'ProductController@getMainProducts']);
+		Route::get('/searchAutocomplete/{query?}', ['uses' => 'ProductController@searchAutocomplete'])->where('query', '(.*)');
+	});
+	Route::get('/product/{url}', ['uses' => 'ProductController@getProduct'])->where('url', '(.*)');
 
-	Route::post('/login', ['uses' => 'AuthController@login']);
+	// USER
+	Route::group(['prefix' => 'user'], function() {
 
-	Route::post('/create', ['uses' => 'AuthController@createUser']);
+		Route::post('/login', ['uses' => 'AuthController@login']);
 
-	Route::post('/checkAuth', ['uses' => 'AuthController@checkAuth']);
+		Route::post('/logout', ['uses' => 'AuthController@logout']);
 
-});
+		Route::post('/create', ['uses' => 'AuthController@createUser']);
 
-// CATEGORIES
-Route::get('/categories', ['uses' => 'ProductController@getAllCategories']);
+		Route::post('/checkAuth', ['uses' => 'AuthController@checkAuth']);
 
-Route::get('/category/{category}/{subcategory?}', ['uses' => 'ProductController@getProductsByCategory'])
-		->where(['category' => '(.*)', 'subcategory' => '(.*)']);
+	});
+
+	// CATEGORIES
+	Route::get('/categories', ['uses' => 'ProductController@getAllCategories']);
+
+	Route::get('/category/{category}/{subcategory?}', ['uses' => 'ProductController@getProductsByCategory'])
+			->where(['category' => '(.*)', 'subcategory' => '(.*)']);
 
 
-// CART
-Route::group(['prefix' => 'cart', 'middleware' => ['authUser']], function() {
-	Route::get('/', ['uses' => 'CartController@index']);
-	Route::post('/add', ['uses' => 'CartController@add']);
-	Route::post('/delete', ['uses' => 'CartController@delete']);
+	// CART
+	Route::group(['prefix' => 'cart', 'middleware' => ['authUser']], function() {
+		Route::get('/', ['uses' => 'CartController@index']);
+		Route::post('/add', ['uses' => 'CartController@add']);
+		Route::post('/delete', ['uses' => 'CartController@delete']);
+	});
+
 });

@@ -77,6 +77,20 @@ body {
 		right: 0;
 	}
 
+	&.cart-opened #cart-overlay {
+		display: block;
+	}
+}
+
+#cart-overlay {
+	display: none;
+	position: fixed;
+	z-index: 999;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .input-field {
@@ -147,6 +161,7 @@ body {
 
 .cart-container {
 	position: fixed;
+	z-index: 1000;
     right: -315px;
     top: 0;
     width: 300px;
@@ -461,4 +476,32 @@ nav {
 	border: none;
 	font-size: 25px;
 	width: 35px;
+}
+
+.logged-user {
+	position: relative;
+	cursor: pointer;
+}
+
+.logged-menu {
+	display: none;
+	position: absolute;
+	top: 25px;
+	left: 12px;
+	z-index: 100;
+	background: white;
+	padding: 5px 10px;
+	width: 100px;
+	text-align: left;
+	line-height: 1.7;
+	box-shadow: 0px 1px 5px;
+	border-radius: 5px;
+	backface-visibility: visible !important;
+	animation-name: flipInX;
+	animation-duration: .8s;
+	animation-fill-mode: both;
+}
+
+.logged-menu.active {
+	display: block;
 }

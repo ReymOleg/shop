@@ -16,7 +16,7 @@
 		        	<input type="password" id="login-pass" placeholder=" " v-model="loginFields.password">
 					<label for="login-pass">Пароль</label>
 		        </div>
-		        <button @click="loginUser()" class="button primary block center">Войти</button>
+		        <button @click="loginUser()" @keyup.enter="loginUser()" class="button primary block center">Войти</button>
 			</div>
 		</div>
 		<div class="register-block padding" :class="tabs.register">
@@ -37,7 +37,7 @@
 	        	<input type="text" id="register-coupon" placeholder=" " v-model="registerFields.coupon">
 				<label for="register-coupon">Купон</label>
 			</div>
-	        <button @click="createUser()" class="button primary block center">Зарегистрироваться</button>
+	        <button @click="createUser()" @keyup.enter="createUser()" class="button primary block center">Зарегистрироваться</button>
 		</div>
 	</div>
 </template>

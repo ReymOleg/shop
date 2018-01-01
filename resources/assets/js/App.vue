@@ -3,6 +3,7 @@
     <div id="content" :class="classes.mainClasses">
       <header class="container-fluid">
         <cart></cart>
+        <div id="cart-overlay" @click="cartClose"></div>
         <div v-if="!isAuth" class="login-modal-block" :class="classes.loginModalClasses">
           <login-modal></login-modal>
           <div @click="toggleLoginModal()" class="login-modal-overlay"></div>
@@ -22,7 +23,13 @@
                   <i class="fa fa-user" aria-hidden="true"></i> <span class="hidden-xs">Войти</span>
                 </div>
                 <div v-else>
-                  <i class="fa fa-user" aria-hidden="true"></i> <span class="hidden-xs">{{ userData.name }}</span>
+                  <div class="logged-user" v-click-outside="loggedMenuClose" @click="loggedMenuToggle()">
+                    <i class="fa fa-user" aria-hidden="true"></i> <span class="hidden-xs">{{ userData.name }}</span>
+                    <div class="logged-menu" :class="classes.loggedMenuClasses">
+                      <div class="orders">Мои заказы</div>
+                      <div class="logout" @click="logout()">Выйти</div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="col-xs-8 pointer">
@@ -34,8 +41,8 @@
           </div>
         </div>
         <nav class="container-fluid center" :class="classes.menuClasses">
-          <div class="nav-category">
-            <router-link key="home" :to="'/'" class="hidden-home" @click="menuToggle()">Главная</router-link>
+          <div class="nav-category" @click="menuClose()">
+            <router-link key="home" :to="'/'" class="hidden-home">Главная</router-link>
           </div>
           <div v-if="categories" v-for="parentCategory of categories" class="nav-category" @click="menuToggle()">
             <router-link key="parentCategory.url" :to="'/category/' + parentCategory.url">{{ parentCategory.name }}</router-link>
@@ -84,7 +91,10 @@ export default {
         loginModalClasses: {
           'active': false,
           'modal-active': false,
-        }
+        },
+        loggedMenuClasses: {
+          'active': false,
+        },
       }
     }
   },
@@ -100,16 +110,29 @@ export default {
     ...mapActions({
       getAllCategories: 'categories/getAllCategories',
       checkAuth: 'user/checkAuth',
-      getCart: 'products/getCart'
+      getCart: 'products/getCart',
+      logout: 'user/logout',
     }),
     cartToggle() {
       this.classes.mainClasses['cart-opened'] = !this.classes.mainClasses['cart-opened']
+    },
+    cartClose() {
+      this.classes.mainClasses['cart-opened'] = false
     },
     toggleLoginModal() {
       this.classes.loginModalClasses['active'] = !this.classes.loginModalClasses['active']
     },
     menuToggle() {
       this.classes.menuClasses['active'] = !this.classes.menuClasses['active']
+    },
+    menuClose() {
+      this.classes.menuClasses['active'] = false
+    },
+    loggedMenuToggle(e, param) {
+      this.classes.loggedMenuClasses['active'] = !this.classes.loggedMenuClasses['active']
+    },
+    loggedMenuClose() {
+      this.classes.loggedMenuClasses['active'] = false
     }
   },
   mounted() {
@@ -130,6 +153,6 @@ export default {
   //   },
   // },
   name: 'app',
-  components: { Search, Cart, LoginModal }
+  components: { Search, Cart, LoginModal },
 }
 </script>

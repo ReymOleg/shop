@@ -1,19 +1,27 @@
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 769px) {
+	h1 {
+		font-size: 22px;
+	}
+	h3.checkout-total {
+		font-size: 15px;
+	}
 }
 
 @media screen and (max-width: 1000px) {
 	nav {
 		position: fixed;
 		left: 0;
-		top: 55px;
-		z-index: 100;
+		top: 0;
+		z-index: 1000;
 		background: white;
-		height: auto;
+		height: 100%;
+		-webkit-box-shadow: 0 0 5px black;
 		box-shadow: 0 0 5px black;
 		left: -500px;
+		-webkit-transition: all .3s ease;
 		transition: all .3s ease;
 	}
-	nav.active {
+	.menu-opened nav {
 		left: 0;
 	}
 	.nav-category {

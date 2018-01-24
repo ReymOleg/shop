@@ -12793,7 +12793,7 @@ hr {
 }
 
 * {
-  font-family: 'Neucha', ubuntu, comic-sans, sans-serif, cursive;
+  font-family: comic-sans, ubuntu, sans-serif, cursive;
 }
 
 @-webkit-keyframes flipInX {
@@ -12923,7 +12923,8 @@ body {
   right: 0;
 }
 
-#content.cart-opened #cart-overlay {
+#content.cart-opened #cart-overlay,
+#content.menu-opened #cart-overlay {
   display: block;
 }
 
@@ -13403,22 +13404,51 @@ nav {
   display: block;
 }
 
+.order-item {
+  width: 100%;
+  display: inline-block;
+  background: white;
+  padding: 10px 0px;
+  -webkit-box-shadow: 0 0 5px black;
+          box-shadow: 0 0 5px black;
+  border-radius: 5px;
+  margin: 5px 0;
+}
+
+.order-item .product-main-image {
+  margin: 5px 0;
+}
+
+.order-item .price-block {
+  color: #75af00;
+}
+
+@media screen and (max-width: 769px) {
+  h1 {
+    font-size: 22px;
+  }
+
+  h3.checkout-total {
+    font-size: 15px;
+  }
+}
+
 @media screen and (max-width: 1000px) {
   nav {
     position: fixed;
     left: 0;
-    top: 55px;
-    z-index: 100;
+    top: 0;
+    z-index: 1000;
     background: white;
-    height: auto;
+    height: 100%;
     -webkit-box-shadow: 0 0 5px black;
-            box-shadow: 0 0 5px black;
+    box-shadow: 0 0 5px black;
     left: -500px;
     -webkit-transition: all .3s ease;
     transition: all .3s ease;
   }
 
-  nav.active {
+  .menu-opened nav {
     left: 0;
   }
 

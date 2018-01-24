@@ -44949,6 +44949,23 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -44956,19 +44973,34 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
-			visible: false
+			total: 0
 		};
 	},
 
 	computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])({
-		// product: 'products/getProductOfUrl'
+		cart: 'products/cart'
 	})),
 	methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({
-		// getProduct: 'products/getProduct',
-		// addToCart: 'products/addToCart'
-	})),
+		deleteFromCart: 'products/deleteFromCart',
+		getCart: 'products/getCart'
+	}), {
+		calculateCart: function calculateCart(items) {
+			this.total = 0;
+			for (var i in items) {
+				this.total += items[i].price * items[i].count;
+			}
+		}
+	}),
 	mounted: function mounted() {
-		// this.getProduct(this.$route.params[0])
+		this.getCart();
+	},
+
+	watch: {
+		'cart': {
+			handler: function handler(items) {
+				this.calculateCart(items);
+			}
+		}
 	}
 });
 
@@ -44980,7 +45012,79 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "checkout" }, [_vm._v("\n\tsdfad\n\t")])
+  return _c("div", { staticClass: "checkout row" }, [
+    _vm.cart.length
+      ? _c("div", { staticClass: "product-content" }, [
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              { staticClass: "col-md-6 col-xs-7" },
+              [
+                _c("h1", [_vm._v("Заказ:")]),
+                _vm._v(" "),
+                _vm._l(_vm.cart, function(item, index) {
+                  return _c("div", { key: index, staticClass: "order-item" }, [
+                    _c("div", { staticClass: "col-xs-12 col-sm-6" }, [
+                      _c("div", { staticClass: "product-main-image" }, [
+                        _c("img", { attrs: { src: /img/ + item.image } })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-xs-12 col-sm-6" }, [
+                      _c("div", { staticClass: "pull-right" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger",
+                            on: {
+                              click: function($event) {
+                                _vm.deleteFromCart(item.cart_id)
+                              }
+                            }
+                          },
+                          [
+                            _c("i", {
+                              staticClass: "fa fa-times",
+                              attrs: { "aria-hidden": "true" }
+                            })
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("h4", { staticClass: "no-margin" }, [
+                        _vm._v(_vm._s(item.title))
+                      ]),
+                      _vm._v(" "),
+                      _c("h4", { staticClass: "price-block" }, [
+                        _vm._v(
+                          _vm._s(item.count) +
+                            " x " +
+                            _vm._s(item.price) +
+                            " руб."
+                        )
+                      ])
+                    ])
+                  ])
+                })
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6 col-xs-5" }, [
+              _c("h1", [_vm._v("Итого:")]),
+              _vm._v(" "),
+              _c("h3", { staticClass: "checkout-total" }, [
+                _vm._v(_vm._s(_vm.total) + " руб.")
+              ]),
+              _vm._v(" "),
+              _c("button", { staticClass: "btn btn-success" }, [
+                _vm._v("Оплатить")
+              ])
+            ])
+          ])
+        ])
+      : _c("div", [_c("h1", [_vm._v("Ваша корзина пуста")])])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -45140,7 +45244,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     return {
       classes: {
         mainClasses: {
-          'cart-opened': false
+          'cart-opened': false,
+          'menu-opened': false
         },
         menuClasses: {
           'active': false
@@ -45168,8 +45273,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     getCart: 'products/getCart',
     logout: 'user/logout'
   }), {
-    cartToggle: function cartToggle() {
-      this.classes.mainClasses['cart-opened'] = !this.classes.mainClasses['cart-opened'];
+    cartOpen: function cartOpen() {
+      this.classes.mainClasses['cart-opened'] = true;
     },
     cartClose: function cartClose() {
       this.classes.mainClasses['cart-opened'] = false;
@@ -45177,17 +45282,21 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     toggleLoginModal: function toggleLoginModal() {
       this.classes.loginModalClasses['active'] = !this.classes.loginModalClasses['active'];
     },
-    menuToggle: function menuToggle() {
-      this.classes.menuClasses['active'] = !this.classes.menuClasses['active'];
+    menuOpen: function menuOpen() {
+      this.classes.mainClasses['menu-opened'] = true;
     },
     menuClose: function menuClose() {
-      this.classes.menuClasses['active'] = false;
+      this.classes.mainClasses['menu-opened'] = false;
     },
     loggedMenuToggle: function loggedMenuToggle(e, param) {
       this.classes.loggedMenuClasses['active'] = !this.classes.loggedMenuClasses['active'];
     },
     loggedMenuClose: function loggedMenuClose() {
       this.classes.loggedMenuClasses['active'] = false;
+    },
+    closeAll: function closeAll() {
+      this.menuClose();
+      this.cartClose();
     }
   }),
   mounted: function mounted() {
@@ -46125,7 +46234,11 @@ var render = function() {
           _vm._v(" "),
           _c("div", {
             attrs: { id: "cart-overlay" },
-            on: { click: _vm.cartClose }
+            on: {
+              click: function($event) {
+                _vm.closeAll()
+              }
+            }
           }),
           _vm._v(" "),
           !_vm.isAuth
@@ -46168,7 +46281,7 @@ var render = function() {
                     staticClass: "menu-toggle",
                     on: {
                       click: function($event) {
-                        _vm.menuToggle()
+                        _vm.menuOpen()
                       }
                     }
                   },
@@ -46280,7 +46393,7 @@ var render = function() {
                     {
                       on: {
                         click: function($event) {
-                          _vm.cartToggle()
+                          _vm.cartOpen()
                         }
                       }
                     },
@@ -46342,7 +46455,7 @@ var render = function() {
                         staticClass: "nav-category",
                         on: {
                           click: function($event) {
-                            _vm.menuToggle()
+                            _vm.menuClose()
                           }
                         }
                       },
@@ -46377,7 +46490,7 @@ var render = function() {
                                   },
                                   on: {
                                     click: function($event) {
-                                      _vm.menuToggle()
+                                      _vm.menuClose()
                                     }
                                   }
                                 },

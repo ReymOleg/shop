@@ -1,19 +1,36 @@
 <template>
-	<div class="checkout">
-		sdfad
-		<!-- <div class="product-content" v-show="visible">
-			<div class="col-xs-12 col-sm-6">
-				<div class="product-main-image">
-					<img :src="/img/ + product.image">
+	<div class="checkout row">
+		<div class="product-content" v-if="cart.length">
+			<div class="row">
+				<div class="col-md-6 col-xs-7">
+					<h1>Заказ:</h1>
+					<div class="order-item" v-for="(item, index) in cart" :key="index">
+						<div class="col-xs-12 col-sm-6">
+							<div class="product-main-image">
+								<img :src="/img/ + item.image">
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<div class="pull-right">
+								<button class="btn btn-danger" @click="deleteFromCart(item.cart_id)">
+									<i class="fa fa-times" aria-hidden="true"></i>
+								</button>
+							</div>
+							<h4 class="no-margin">{{ item.title }}</h4>
+							<h4 class="price-block">{{ item.count }} x {{ item.price }} руб.</h4>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-xs-5">
+					<h1>Итого:</h1>
+					<h3 class="checkout-total">{{ total }} руб.</h3>
+					<button class="btn btn-success">Оплатить</button>
 				</div>
 			</div>
-			<div class="col-xs-12 col-sm-6">
-				<h1 class="no-margin">{{ product.title }}</h1>
-				<p class="product-price">{{ product.price }} руб.</p>
-				<button @click="addToCart(product.id)" class="button primary">В корзину</button>
-				<p>{{ product.description }}</p>
-			</div>
-		</div> -->
+		</div>
+		<div v-else>
+			<h1>Ваша корзина пуста</h1>
+		</div>
 	</div>
 </template>
 
@@ -24,22 +41,35 @@ import { mapActions } from 'vuex'
 	export default {
 		data() {
 			return {
-				visible: false
+				total: 0,
 			}
 		},
 		computed: {
 			...mapGetters({
-				// product: 'products/getProductOfUrl'
+				cart: 'products/cart'
 			})
 		},
 		methods: {
 			...mapActions({
-				// getProduct: 'products/getProduct',
-				// addToCart: 'products/addToCart'
+				deleteFromCart: 'products/deleteFromCart',
+				getCart: 'products/getCart'
 			}),
+			calculateCart(items) {
+				this.total = 0;
+				for (let i in items) {
+					this.total += items[i].price * items[i].count
+				}
+			}
 		},
 		mounted() {
-			// this.getProduct(this.$route.params[0])
+			this.getCart()
         },
+        watch: {
+			'cart': {
+				handler: function(items) {
+					this.calculateCart(items)
+				}
+			}
+		},
 	}
 </script>

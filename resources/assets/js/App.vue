@@ -3,7 +3,7 @@
     <div id="content" :class="classes.mainClasses">
       <header class="container-fluid">
         <cart cartClose="cartClose()"></cart>
-        <div id="cart-overlay" @click="cartClose"></div>
+        <div id="cart-overlay" @click="closeAll()"></div>
         <div v-if="!isAuth" class="login-modal-block" :class="classes.loginModalClasses">
           <login-modal></login-modal>
           <div @click="toggleLoginModal()" class="login-modal-overlay"></div>
@@ -11,7 +11,7 @@
         <div class="row top-header">
           <div class="header-logo col-xs-2 col-sm-4">
             <router-link to="/" class="logo-link">LOGO</router-link>
-            <button @click="menuToggle()" class="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></button>
+            <button @click="menuOpen()" class="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></button>
           </div>
           <div class="header-center col-xs-6 col-sm-4">
             <search></search>
@@ -33,7 +33,7 @@
                 </div>
               </div>
               <div class="col-xs-8 pointer">
-                <div @click="cartToggle()">
+                <div @click="cartOpen()">
                   <i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="hidden-xs">Корзина</span> (<span>{{ cart.length || 0 }}</span>)
                 </div>
               </div>
@@ -44,11 +44,11 @@
           <div class="nav-category" @click="menuClose()">
             <router-link key="home" :to="'/'" class="hidden-home">Главная</router-link>
           </div>
-          <div v-if="categories" v-for="parentCategory of categories" class="nav-category" @click="menuToggle()">
+          <div v-if="categories" v-for="parentCategory of categories" class="nav-category" @click="menuClose()">
             <router-link key="parentCategory.url" :to="'/category/' + parentCategory.url">{{ parentCategory.name }}</router-link>
             <div class="nav-subcategories">
               <div class="col-xs-8 col-sm-6">
-                <router-link class="block" key="subcategory.url" v-for="subcategory of parentCategory.subcategories" :to="'/category/' + parentCategory.url + '/' + subcategory.url" @click="menuToggle()">{{ subcategory.name }}</router-link>
+                <router-link class="block" key="subcategory.url" v-for="subcategory of parentCategory.subcategories" :to="'/category/' + parentCategory.url + '/' + subcategory.url" @click="menuClose()">{{ subcategory.name }}</router-link>
               </div>
               <div class="col-xs-4 col-sm-6">
                 <div class="block">
@@ -84,6 +84,7 @@ export default {
       classes: {
         mainClasses: {
           'cart-opened': false,
+          'menu-opened': false,
         },
         menuClasses: {
           'active': false,
@@ -113,8 +114,8 @@ export default {
       getCart: 'products/getCart',
       logout: 'user/logout',
     }),
-    cartToggle() {
-      this.classes.mainClasses['cart-opened'] = !this.classes.mainClasses['cart-opened']
+    cartOpen() {
+      this.classes.mainClasses['cart-opened'] = true
     },
     cartClose() {
       this.classes.mainClasses['cart-opened'] = false
@@ -122,17 +123,21 @@ export default {
     toggleLoginModal() {
       this.classes.loginModalClasses['active'] = !this.classes.loginModalClasses['active']
     },
-    menuToggle() {
-      this.classes.menuClasses['active'] = !this.classes.menuClasses['active']
+    menuOpen() {
+      this.classes.mainClasses['menu-opened'] = true
     },
     menuClose() {
-      this.classes.menuClasses['active'] = false
+      this.classes.mainClasses['menu-opened'] = false
     },
     loggedMenuToggle(e, param) {
       this.classes.loggedMenuClasses['active'] = !this.classes.loggedMenuClasses['active']
     },
     loggedMenuClose() {
       this.classes.loggedMenuClasses['active'] = false
+    },
+    closeAll() {
+      this.menuClose()
+      this.cartClose()
     }
   },
   mounted() {

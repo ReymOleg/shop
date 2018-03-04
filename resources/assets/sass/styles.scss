@@ -1,5 +1,6 @@
 * {
-	font-family: comic-sans, ubuntu, sans-serif, cursive;
+	/*font-family: ubuntu, 'Ubuntu', 'Comic Sans MS', 'Marker Felt', sans-serif;*/
+	font-family: "ubuntu", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 @keyframes flipInX {
@@ -95,58 +96,18 @@ body {
 }
 
 .input-field {
-	& {
-		display: flex;
-		flex-flow: column-reverse;
-		margin-bottom: 1em;
-	}
-	label, input {
-		transition: all 0.2s;
-		touch-action: manipulation;
-	}
-	label {
-		font-size: 11px;
-	}
-	input {
-		font-size: 14px;
-	}
 	input {
 		border: 0;
 		border-bottom: 1px solid #ccc;
 		font-family: inherit;
 		-webkit-appearance: none;
-		border-radius: 0;
-		padding: 0;
 		cursor: text;
-	}
-	input:focus {
-		outline: 0;
-		border-bottom: 1px solid #666;
-	}
-	label {
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-	}
-	input:placeholder-shown + label {
-		cursor: text;
-		max-width: 66.66%;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		transform-origin: left bottom;
-		transform: translate(0, 2.125rem) scale(1.5);
-	}
-	::-webkit-input-placeholder {
-		opacity: 0;
-		transition: inherit;
-	}
-	input:focus::-webkit-input-placeholder {
-		opacity: 1;
-	}
-	input:not(:placeholder-shown) + label,
-	input:focus + label {
-		transform: translate(0, 0) scale(1);
-		cursor: pointer;
+		outline: none;
+		width: 100%;
+		height: 40px;
+		margin: 5px 0;
+		padding: 10px;
+		border-radius: 5px;
 	}
 }
 
@@ -352,7 +313,7 @@ nav {
 
 .login-modal {
 	display: none;
-    position: fixed;
+    position: absolute;
     width: 500px;
     left: 50%;
     top: 40%;

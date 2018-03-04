@@ -114,8 +114,40 @@ export default {
       getAllCategories: 'categories/getAllCategories',
       checkAuth: 'user/checkAuth',
       getCart: 'products/getCart',
-      logout: 'user/logout',
+      userLogout: 'user/logout',
     }),
+    logout() {
+      let _self = this;
+
+        this.$snotify.async(
+          'Пожалуйста ожидайте',
+          'Авторизация',
+          () => new Promise((resolve, reject) => {
+            _self.userLogout()
+              .then((response) => {
+                resolve({
+                  title: 'До свидания!',
+                  body: 'возвращайтесь ещё :)',
+                  config: {
+                    closeOnClick: true,
+                    timeout: 2000
+                  }
+                })
+              })
+              .catch((e) => {
+                reject({
+                  title: 'Ошибка!',
+                  body: 'Что-то пошло не так...',
+                  config: {
+                    closeOnClick: true,
+                    timeout: 3000
+                  }
+                })
+              })
+          })
+        )
+      
+    },
     cartOpen() {
       this.classes.mainClasses['cart-opened'] = true
     },

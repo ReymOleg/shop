@@ -44,14 +44,14 @@ import { mapActions } from 'vuex'
 					'В корзину',
 					() => new Promise((resolve, reject) => {
 			      _self.toCart(productId)
-							.then((response) => {
-								resolve({
-						        title: 'Успешно!',
-						        body: 'Товар добавлен!',
-						        config: {
-						          closeOnClick: true,
-						          timeout: 2000
-						        }
+						.then((response) => {
+							resolve({
+					        title: 'Успешно!',
+					        body: 'Товар добавлен в корзину!',
+					        config: {
+					          closeOnClick: true,
+					          timeout: 2000
+					        }
 					      })
 					    })
 					    .catch((e) => {

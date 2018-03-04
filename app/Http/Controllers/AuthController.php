@@ -64,12 +64,12 @@ class AuthController extends Controller {
 
 		} else {
 
-			$user = DB::table('users')->where('token', $this->token)->get();
+			$user = DB::table('users')->where('token', $this->token)->first();
 
-			if(count($user)) {
-				$this->response['auth'] = !(bool)$user[0]->fake;
-				$this->response['token'] = $user[0]->token;
-				$this->response['user'] = $user[0];
+			if(count($user) && substr($this->token, 0, 4) != 'temp') {
+				$this->response['auth'] = !(bool)$user->fake;
+				$this->response['token'] = $user->token;
+				$this->response['user'] = $user;
 			}
 
 		}
@@ -87,6 +87,7 @@ class AuthController extends Controller {
 
 		if (Auth::attempt(['email' => $request['email'], 'password' => $request['password']])) {
 			Auth::user()->updated_at = new DateTime();
+			Auth::user()->token = $this->generateToken($request);
 			Auth::user()->save();
 			$this->user = Auth::user();
 			$this->response['auth'] = true;
@@ -100,11 +101,18 @@ class AuthController extends Controller {
 	}
 
 	public function logout(Request $request) {
+		$user = DB::table('users')->where('token', $this->token)->get();
+		$token = $this->generateTempToken($request);
+
+		if ($user) {
+			DB::table('users')->update(['token' => $token]);
+		}
+
 		Auth::logout();
 
 		$this->response['auth'] = false;
 		$this->response['user'] = null;
-		$this->response['token'] = $this->generateTempToken($request);
+		$this->response['token'] = $token;
 
 		return response()->json($this->response, $this->response['statusCode']);
 	}

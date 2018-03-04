@@ -29,7 +29,7 @@
 			</div>
 		</div>
 		<div v-else>
-			<h1>Ваша корзина пуста</h1>
+			<h1>Выберите что-нибудь, что бы заказать...</h1>
 		</div>
 	</div>
 </template>
@@ -50,57 +50,40 @@ import { mapActions } from 'vuex'
 			})
 		},
 		methods: {
-			...mapActions({
-				deleteProductFromCart: 'products/deleteFromCart',
-				getCart: 'products/getCart'
-			}),
-			calculateCart(items) {
-				this.total = 0;
-				for (let i in items) {
-					this.total += items[i].price * items[i].count
-				}
-			},
-			deleteFromCart(productId) {
-				let _self = this;
+			// deleteFromCart(productId) {
+			// 	let _self = this;
 
-				this.$snotify.async(
-					'Пожалуйста ожидайте',
-					'Удаление',
-					() => new Promise((resolve, reject) => {
-			      _self.deleteProductFromCart(productId)
-							.then((response) => {
-								resolve({
-						        title: 'Успешно!',
-						        body: 'Товар удален из корзины!',
-						        config: {
-						          closeOnClick: true,
-						          timeout: 2000
-						        }
-					      })
-					    })
-					    .catch((e) => {
-					    	reject({
-					        title: 'Ошибка!',
-					        body: 'Что-то пошло не так...',
-					        config: {
-					          closeOnClick: true,
-					          timeout: 3000
-					        }
-					      })
-					    })
-				  	})
-			  	)
-			}
+			// 	this.$snotify.async(
+			// 		'Пожалуйста ожидайте',
+			// 		'Удаление',
+			// 		() => new Promise((resolve, reject) => {
+			//       _self.deleteProductFromCart(productId)
+			// 				.then((response) => {
+			// 					resolve({
+			// 			        title: 'Успешно!',
+			// 			        body: 'Товар удален из корзины!',
+			// 			        config: {
+			// 			          closeOnClick: true,
+			// 			          timeout: 2000
+			// 			        }
+			// 		      })
+			// 		    })
+			// 		    .catch((e) => {
+			// 		    	reject({
+			// 		        title: 'Ошибка!',
+			// 		        body: 'Что-то пошло не так...',
+			// 		        config: {
+			// 		          closeOnClick: true,
+			// 		          timeout: 3000
+			// 		        }
+			// 		      })
+			// 		    })
+			// 	  	})
+			//   	)
+			// }
 		},
 		mounted() {
-			this.getCart()
+			
         },
-        watch: {
-			'cart': {
-				handler: function(items) {
-					this.calculateCart(items)
-				}
-			}
-		},
 	}
 </script>

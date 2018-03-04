@@ -1,5 +1,5 @@
 <template>
-	<div class="login-modal">
+	<div class="login-modal" role="dialog">
 		<div class="login-choose row">
 			<div class="col-xs-6 center login-tab" :class="tabs.login" @click="toggleTab('login')">Вход</div>
 			<div class="col-xs-6 center register-tab" :class="tabs.register" @click="toggleTab('register')">Регистрация</div>
@@ -9,12 +9,10 @@
 			<div class="login-form">
 				<h2 class="center">Вход в аккаунт</h2>
 				<div class="input-field">
-		        	<input type="text" id="login-email" placeholder=" " v-model="loginFields.email">
-					<label for="login-email">Email</label>
+		        	<input type="text" id="login-email" placeholder="Email" v-model="loginFields.email">
 				</div>
 				<div class="input-field">
-		        	<input type="password" id="login-pass" placeholder=" " v-model="loginFields.password">
-					<label for="login-pass">Пароль</label>
+		        	<input type="password" id="login-pass" placeholder="Пароль" v-model="loginFields.password">
 		        </div>
 		        <button @click="loginUser()" @keyup.enter="loginUser()" class="button primary block center">Войти</button>
 			</div>
@@ -22,20 +20,16 @@
 		<div class="register-block padding" :class="tabs.register">
 			<h2 class="center">Регистрация</h2>
 			<div class="input-field">
-	        	<input type="text" id="register-name" placeholder=" " v-model="registerFields.name">
-				<label for="register-name">Имя</label>
+	        	<input type="text" id="register-name" placeholder="Имя" v-model="registerFields.name">
 			</div>
 			<div class="input-field">
-	        	<input type="text" id="register-email" placeholder=" " v-model="registerFields.email">
-				<label for="register-email">Email</label>
+	        	<input type="text" id="register-email" placeholder="Email" v-model="registerFields.email">
 			</div>
 			<div class="input-field">
-	        	<input type="password" id="register-pass" placeholder=" " v-model="registerFields.password">
-				<label for="register-pass">Пароль</label>
+	        	<input type="password" id="register-pass" placeholder="Пароль" v-model="registerFields.password">
 	        </div>
 	        <div class="input-field">
-	        	<input type="text" id="register-coupon" placeholder=" " v-model="registerFields.coupon">
-				<label for="register-coupon">Купон</label>
+	        	<input type="text" id="register-coupon" placeholder="Купон" v-model="registerFields.coupon">
 			</div>
 	        <button @click="createUser()" @keyup.enter="createUser()" class="button primary block center">Зарегистрироваться</button>
 		</div>

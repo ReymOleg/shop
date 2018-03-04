@@ -47453,7 +47453,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 					_self.toCart(productId).then(function (response) {
 						resolve({
 							title: 'Успешно!',
-							body: 'Товар добавлен!',
+							body: 'Товар добавлен в корзину!',
 							config: {
 								closeOnClick: true,
 								timeout: 2000
@@ -47823,7 +47823,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 		cart: 'products/cart'
 	})),
 	methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({
-		deleteFromCart: 'products/deleteFromCart',
+		deleteProductFromCart: 'products/deleteFromCart',
 		getCart: 'products/getCart'
 	}), {
 		calculateCart: function calculateCart(items) {
@@ -47831,6 +47831,33 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 			for (var i in items) {
 				this.total += items[i].price * items[i].count;
 			}
+		},
+		deleteFromCart: function deleteFromCart(productId) {
+			var _self = this;
+
+			this.$snotify.async('Пожалуйста ожидайте', 'Удаление', function () {
+				return new Promise(function (resolve, reject) {
+					_self.deleteProductFromCart(productId).then(function (response) {
+						resolve({
+							title: 'Успешно!',
+							body: 'Товар удален из корзины!',
+							config: {
+								closeOnClick: true,
+								timeout: 2000
+							}
+						});
+					}).catch(function (e) {
+						reject({
+							title: 'Ошибка!',
+							body: 'Что-то пошло не так...',
+							config: {
+								closeOnClick: true,
+								timeout: 3000
+							}
+						});
+					});
+				});
+			});
 		}
 	}),
 	mounted: function mounted() {
@@ -47912,17 +47939,27 @@ var render = function() {
               2
             ),
             _vm._v(" "),
-            _c("div", { staticClass: "col-md-6 col-xs-5" }, [
-              _c("h1", [_vm._v("Итого:")]),
-              _vm._v(" "),
-              _c("h3", { staticClass: "checkout-total" }, [
-                _vm._v(_vm._s(_vm.total) + " руб.")
-              ]),
-              _vm._v(" "),
-              _c("button", { staticClass: "btn btn-success" }, [
-                _vm._v("ЗАКАЗАТЬ")
-              ])
-            ])
+            _c(
+              "div",
+              { staticClass: "col-md-6 col-xs-5" },
+              [
+                _c("h1", [_vm._v("Итого:")]),
+                _vm._v(" "),
+                _c("h3", { staticClass: "checkout-total" }, [
+                  _vm._v(_vm._s(_vm.total) + " руб.")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "logo-link btn btn-success",
+                    attrs: { to: "/" }
+                  },
+                  [_vm._v("ЗАКАЗАТЬ")]
+                )
+              ],
+              1
+            )
           ])
         ])
       : _c("div", [_c("h1", [_vm._v("Ваша корзина пуста")])])
@@ -48115,8 +48152,35 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     getAllCategories: 'categories/getAllCategories',
     checkAuth: 'user/checkAuth',
     getCart: 'products/getCart',
-    logout: 'user/logout'
+    userLogout: 'user/logout'
   }), {
+    logout: function logout() {
+      var _self = this;
+
+      this.$snotify.async('Пожалуйста ожидайте', 'Авторизация', function () {
+        return new Promise(function (resolve, reject) {
+          _self.userLogout().then(function (response) {
+            resolve({
+              title: 'До свидания!',
+              body: 'возвращайтесь ещё :)',
+              config: {
+                closeOnClick: true,
+                timeout: 2000
+              }
+            });
+          }).catch(function (e) {
+            reject({
+              title: 'Ошибка!',
+              body: 'Что-то пошло не так...',
+              config: {
+                closeOnClick: true,
+                timeout: 3000
+              }
+            });
+          });
+        });
+      });
+    },
     cartOpen: function cartOpen() {
       this.classes.mainClasses['cart-opened'] = true;
     },
@@ -48762,12 +48826,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -48880,7 +48938,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "login-modal" }, [
+  return _c("div", { staticClass: "login-modal", attrs: { role: "dialog" } }, [
     _c("div", { staticClass: "login-choose row" }, [
       _c(
         "div",
@@ -48927,7 +48985,7 @@ var render = function() {
                 expression: "loginFields.email"
               }
             ],
-            attrs: { type: "text", id: "login-email", placeholder: " " },
+            attrs: { type: "text", id: "login-email", placeholder: "Email" },
             domProps: { value: _vm.loginFields.email },
             on: {
               input: function($event) {
@@ -48937,9 +48995,7 @@ var render = function() {
                 _vm.$set(_vm.loginFields, "email", $event.target.value)
               }
             }
-          }),
-          _vm._v(" "),
-          _c("label", { attrs: { for: "login-email" } }, [_vm._v("Email")])
+          })
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "input-field" }, [
@@ -48952,7 +49008,11 @@ var render = function() {
                 expression: "loginFields.password"
               }
             ],
-            attrs: { type: "password", id: "login-pass", placeholder: " " },
+            attrs: {
+              type: "password",
+              id: "login-pass",
+              placeholder: "Пароль"
+            },
             domProps: { value: _vm.loginFields.password },
             on: {
               input: function($event) {
@@ -48962,9 +49022,7 @@ var render = function() {
                 _vm.$set(_vm.loginFields, "password", $event.target.value)
               }
             }
-          }),
-          _vm._v(" "),
-          _c("label", { attrs: { for: "login-pass" } }, [_vm._v("Пароль")])
+          })
         ]),
         _vm._v(" "),
         _c(
@@ -49007,7 +49065,7 @@ var render = function() {
                 expression: "registerFields.name"
               }
             ],
-            attrs: { type: "text", id: "register-name", placeholder: " " },
+            attrs: { type: "text", id: "register-name", placeholder: "Имя" },
             domProps: { value: _vm.registerFields.name },
             on: {
               input: function($event) {
@@ -49017,9 +49075,7 @@ var render = function() {
                 _vm.$set(_vm.registerFields, "name", $event.target.value)
               }
             }
-          }),
-          _vm._v(" "),
-          _c("label", { attrs: { for: "register-name" } }, [_vm._v("Имя")])
+          })
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "input-field" }, [
@@ -49032,7 +49088,7 @@ var render = function() {
                 expression: "registerFields.email"
               }
             ],
-            attrs: { type: "text", id: "register-email", placeholder: " " },
+            attrs: { type: "text", id: "register-email", placeholder: "Email" },
             domProps: { value: _vm.registerFields.email },
             on: {
               input: function($event) {
@@ -49042,9 +49098,7 @@ var render = function() {
                 _vm.$set(_vm.registerFields, "email", $event.target.value)
               }
             }
-          }),
-          _vm._v(" "),
-          _c("label", { attrs: { for: "register-email" } }, [_vm._v("Email")])
+          })
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "input-field" }, [
@@ -49057,7 +49111,11 @@ var render = function() {
                 expression: "registerFields.password"
               }
             ],
-            attrs: { type: "password", id: "register-pass", placeholder: " " },
+            attrs: {
+              type: "password",
+              id: "register-pass",
+              placeholder: "Пароль"
+            },
             domProps: { value: _vm.registerFields.password },
             on: {
               input: function($event) {
@@ -49067,9 +49125,7 @@ var render = function() {
                 _vm.$set(_vm.registerFields, "password", $event.target.value)
               }
             }
-          }),
-          _vm._v(" "),
-          _c("label", { attrs: { for: "register-pass" } }, [_vm._v("Пароль")])
+          })
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "input-field" }, [
@@ -49082,7 +49138,11 @@ var render = function() {
                 expression: "registerFields.coupon"
               }
             ],
-            attrs: { type: "text", id: "register-coupon", placeholder: " " },
+            attrs: {
+              type: "text",
+              id: "register-coupon",
+              placeholder: "Купон"
+            },
             domProps: { value: _vm.registerFields.coupon },
             on: {
               input: function($event) {
@@ -49092,9 +49152,7 @@ var render = function() {
                 _vm.$set(_vm.registerFields, "coupon", $event.target.value)
               }
             }
-          }),
-          _vm._v(" "),
-          _c("label", { attrs: { for: "register-coupon" } }, [_vm._v("Купон")])
+          })
         ]),
         _vm._v(" "),
         _c(
@@ -50936,18 +50994,22 @@ return Promise$1;
     logout: function logout(_ref4, data) {
       var commit = _ref4.commit;
 
-      axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].logout, {
-        method: 'post',
-        data: data
-      }).then(function (response) {
-        var data = response.data;
-        commit('set', { type: 'auth', items: false });
-        commit('set', { type: 'userData', items: { email: null, name: null } });
-        if (data.token) {
-          __WEBPACK_IMPORTED_MODULE_1_vue_cookie___default.a.set('token', response.data.token, { expires: '1Y' });
-        }
-      }).catch(function (e) {
-        throw e;
+      return new Promise(function (resolve, reject) {
+        axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].logout, {
+          method: 'post',
+          data: data
+        }).then(function (response) {
+          var data = response.data;
+          commit('set', { type: 'auth', items: false });
+          commit('set', { type: 'userData', items: { email: null, name: null } });
+          if (data.token) {
+            __WEBPACK_IMPORTED_MODULE_1_vue_cookie___default.a.set('token', response.data.token, { expires: '1Y' });
+          }
+          resolve(response);
+        }).catch(function (e) {
+          reject(e);
+          throw e;
+        });
       });
     }
   },

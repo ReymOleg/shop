@@ -86,7 +86,7 @@ export default {
             resolve(response);
           })
           .catch(e => {
-            reject(e);
+            reject(e.response);
             throw e
           })
       })

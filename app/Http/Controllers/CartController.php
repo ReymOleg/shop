@@ -58,4 +58,19 @@ class CartController extends Controller
         $cart = $this->getCart();
         return response()->json(['cart' => $cart]);
     }
+
+    public function checkout(Request $request) {
+        $this->validate($request, [
+            'email' => 'required|email',
+            'name' => 'required',
+            'phone' => 'required',
+        ]);
+
+        $cart = $this->getCart();
+
+        // TODO: create table order_product and write products to orders from cart
+        // dd($cart);
+
+        return response()->json(['cart' => $cart]);
+    }
 }

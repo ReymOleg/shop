@@ -120,16 +120,24 @@
 					        config: {
 					          closeOnClick: true,
 					          timeout: 2000
-					        }
+				        	}
 					      })
 					    })
 					    .catch((e) => {
+					    	let error = '';
+					    	if (e.data && e.data.errors) {
+					    		for (let i in e.data.errors) {
+					    			error += e.data.errors[i] + '\n\t';
+					    		}
+					    	} else {
+					    		error = 'Проверьте правильность полей';
+					    	}
 					    	reject({
 					        title: 'Ошибка!',
-					        body: 'Проверьте правильность полей',
+					        body: error,
 					        config: {
 					          closeOnClick: true,
-					          timeout: 3000
+					          // timeout: 3000
 					        }
 					      })
 					    })

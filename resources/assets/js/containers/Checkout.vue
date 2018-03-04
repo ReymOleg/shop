@@ -24,7 +24,10 @@
 				<div class="col-md-6 col-xs-5">
 					<h1>Итого:</h1>
 					<h3 class="checkout-total">{{ total }} руб.</h3>
-					<router-link to="/" class="logo-link btn btn-success">ЗАКАЗАТЬ</router-link>
+					<button class="btn btn-success">
+						<router-link to="/checkout-finish">ЗАКАЗАТЬ</router-link>
+					</button>
+					
 				</div>
 			</div>
 		</div>

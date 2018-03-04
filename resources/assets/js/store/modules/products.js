@@ -114,6 +114,23 @@ export default {
 		    })
 		  })
   	},
+  	checkout({commit}, orderData) {
+  		return new Promise((resolve, reject) => {
+		  	axios(config.url.checkout, {
+	          method: 'post',
+	          data: orderData,
+	        })
+		    .then(response => {
+				// const cart = response.data.cart;
+				// commit('set', { type: 'cart', items: cart })
+				resolve(response);
+		    })
+		    .catch(e => {
+		      reject(e.response);
+		      throw e
+		    })
+		})
+  	},
   },
   mutations: {
 		set(state, { type, items }) {

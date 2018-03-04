@@ -1,31 +1,26 @@
 <template>
-	<div class="checkout row">
-		<div class="product-content" v-if="cart.length">
+	<div class="checkout-finish row">
+		<div v-if="cart.length">
 			<div class="row">
-				<div class="col-md-6 col-xs-7">
-					<h1>Заказ:</h1>
-					<div class="order-item" v-for="(item, index) in cart" :key="index">
-						<div class="col-xs-12 col-sm-6">
-							<div class="product-main-image">
-								<img :src="/img/ + item.image">
-							</div>
+				<div class="col-sm-3 xs-hidden"></div>
+				<div class="col-xs-12 col-sm-6">
+					<h1>Завершение заказа</h1>
+					<h4><i>Наш менеджер свяжется с Вами в ближайшее время</i></h4>
+					<div class="checkout-finish-form">
+						<div class="input-field">
+				        	<input type="text" id="checkout-email" placeholder="Email" v-model="checkoutFields.email">
 						</div>
-						<div class="col-xs-12 col-sm-6">
-							<div class="pull-right">
-								<button class="btn btn-danger" @click="deleteFromCart(item.cart_id)">
-									<i class="fa fa-times" aria-hidden="true"></i>
-								</button>
-							</div>
-							<h4 class="no-margin">{{ item.title }}</h4>
-							<h4 class="price-block">{{ item.count }} x {{ item.price }} руб.</h4>
+						<div class="input-field">
+				        	<input type="text" id="checkout-phone" placeholder="Телефон" v-model="checkoutFields.phone">
 						</div>
+						<div class="input-field">
+				        	<input type="text" id="checkout-name" placeholder="Ваше имя" v-model="checkoutFields.name">
+						</div>
+						<br>
+						<button @click="checkout()" class="btn btn-success">ОФОРМИТЬ ЗАКАЗ</button>
 					</div>
 				</div>
-				<div class="col-md-6 col-xs-5">
-					<h1>Итого:</h1>
-					<h3 class="checkout-total">{{ total }} руб.</h3>
-					<router-link to="/" class="logo-link btn btn-success">ЗАКАЗАТЬ</router-link>
-				</div>
+				<div class="col-sm-3 xs-hidden"></div>
 			</div>
 		</div>
 		<div v-else>
@@ -41,15 +36,62 @@ import { mapActions } from 'vuex'
 	export default {
 		data() {
 			return {
-				total: 0,
+				checkoutFields: {
+					email: '',
+					phone: '',
+					name: '',
+				},
 			}
 		},
 		computed: {
 			...mapGetters({
-				cart: 'products/cart'
+				cart: 'products/cart',
+				userData: 'user/userData',
 			})
 		},
 		methods: {
+			...mapActions({
+				orderCheckout: 'products/checkout',
+			}),
+			checkout() {
+				let _self = this;
+
+				this.$snotify.async(
+					'Пожалуйста ожидайте',
+					'Заказ',
+					() => new Promise((resolve, reject) => {
+			      _self.orderCheckout(_self.checkoutFields)
+							.then((response) => {
+								resolve({
+						        title: 'Успешно!',
+						        body: 'Ваш заказ в обработке!',
+						        config: {
+						          closeOnClick: true,
+						          timeout: 2000
+						        }
+					      })
+					    })
+					    .catch((e) => {
+					    	let error = '';
+					    	if (e.data && e.data.errors) {
+					    		for (let i in e.data.errors) {
+					    			error += e.data.errors[i] + '\n\t';
+					    		}
+					    	} else {
+					    		error = 'Проверьте правильность полей';
+					    	}
+					    	reject({
+					        title: 'Ошибка!',
+					        body: error,
+					        config: {
+					          closeOnClick: true,
+					          // timeout: 3000
+					        }
+					      })
+					    })
+				  	})
+			  	)
+			}
 			// deleteFromCart(productId) {
 			// 	let _self = this;
 
@@ -83,7 +125,9 @@ import { mapActions } from 'vuex'
 			// }
 		},
 		mounted() {
-			
+			this.checkoutFields.email = this.userData.email;
+			this.checkoutFields.phone = this.userData.phone;
+			this.checkoutFields.name = this.userData.name;
         },
 	}
 </script>

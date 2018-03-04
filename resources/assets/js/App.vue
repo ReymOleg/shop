@@ -127,7 +127,7 @@ export default {
               .then((response) => {
                 resolve({
                   title: 'До свидания!',
-                  body: 'возвращайтесь ещё :)',
+                  body: 'возвращайтесь снова :)',
                   config: {
                     closeOnClick: true,
                     timeout: 2000

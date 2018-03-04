@@ -14,4 +14,5 @@ export const url = {
 	getCart: apiUrl + '/cart',
 	addToCart: apiUrl + '/cart/add',
 	deleteFromCart: apiUrl + '/cart/delete',
+	checkout: apiUrl + '/cart/checkout',
 }

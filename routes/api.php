@@ -55,6 +55,7 @@ Route::group(['middleware' => ['throttle:300']], function() {
 		Route::get('/', ['uses' => 'CartController@index']);
 		Route::post('/add', ['uses' => 'CartController@add']);
 		Route::post('/delete', ['uses' => 'CartController@delete']);
+		Route::post('/checkout', ['uses' => 'CartController@checkout']);
 	});
 
 });

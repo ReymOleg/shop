@@ -12583,7 +12583,8 @@ var url = {
 	getAllCategories: apiUrl + '/categories',
 	getCart: apiUrl + '/cart',
 	addToCart: apiUrl + '/cart/add',
-	deleteFromCart: apiUrl + '/cart/delete'
+	deleteFromCart: apiUrl + '/cart/delete',
+	checkout: apiUrl + '/cart/checkout'
 };
 
 /***/ }),
@@ -46908,6 +46909,9 @@ if (inBrowser && window.Vue) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__containers_ProductCategory_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__containers_ProductCategory_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__containers_Checkout_vue__ = __webpack_require__(64);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__containers_Checkout_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__containers_Checkout_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__containers_CheckoutFinish_vue__ = __webpack_require__(105);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__containers_CheckoutFinish_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__containers_CheckoutFinish_vue__);
+
 
 
 
@@ -46920,7 +46924,7 @@ if (inBrowser && window.Vue) {
 // import PersonalAccessTokens from './components/passport/PersonalAccessTokens.vue'
 
 
-var routes = [{ path: '*', component: __WEBPACK_IMPORTED_MODULE_3__containers_Page404_vue___default.a }, { path: '/', component: __WEBPACK_IMPORTED_MODULE_2__containers_Home_vue___default.a }, { path: '/brands', component: __WEBPACK_IMPORTED_MODULE_0__containers_Brands_vue___default.a }, { path: '/contacts', component: __WEBPACK_IMPORTED_MODULE_1__containers_Contacts_vue___default.a }, { path: '/product/*', component: __WEBPACK_IMPORTED_MODULE_4__containers_Product_vue___default.a }, { path: '/category/*', component: __WEBPACK_IMPORTED_MODULE_5__containers_ProductCategory_vue___default.a }, { path: '/checkout', component: __WEBPACK_IMPORTED_MODULE_6__containers_Checkout_vue___default.a }];
+var routes = [{ path: '*', component: __WEBPACK_IMPORTED_MODULE_3__containers_Page404_vue___default.a }, { path: '/', component: __WEBPACK_IMPORTED_MODULE_2__containers_Home_vue___default.a }, { path: '/brands', component: __WEBPACK_IMPORTED_MODULE_0__containers_Brands_vue___default.a }, { path: '/contacts', component: __WEBPACK_IMPORTED_MODULE_1__containers_Contacts_vue___default.a }, { path: '/product/*', component: __WEBPACK_IMPORTED_MODULE_4__containers_Product_vue___default.a }, { path: '/category/*', component: __WEBPACK_IMPORTED_MODULE_5__containers_ProductCategory_vue___default.a }, { path: '/checkout', component: __WEBPACK_IMPORTED_MODULE_6__containers_Checkout_vue___default.a }, { path: '/checkout-finish', component: __WEBPACK_IMPORTED_MODULE_7__containers_CheckoutFinish_vue___default.a }];
 
 // const routes = [
 //   { path: '/login', component: LoginView}, 
@@ -47808,6 +47812,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
 
 
 
@@ -47939,27 +47946,24 @@ var render = function() {
               2
             ),
             _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "col-md-6 col-xs-5" },
-              [
-                _c("h1", [_vm._v("Итого:")]),
-                _vm._v(" "),
-                _c("h3", { staticClass: "checkout-total" }, [
-                  _vm._v(_vm._s(_vm.total) + " руб.")
-                ]),
-                _vm._v(" "),
-                _c(
-                  "router-link",
-                  {
-                    staticClass: "logo-link btn btn-success",
-                    attrs: { to: "/" }
-                  },
-                  [_vm._v("ЗАКАЗАТЬ")]
-                )
-              ],
-              1
-            )
+            _c("div", { staticClass: "col-md-6 col-xs-5" }, [
+              _c("h1", [_vm._v("Итого:")]),
+              _vm._v(" "),
+              _c("h3", { staticClass: "checkout-total" }, [
+                _vm._v(_vm._s(_vm.total) + " руб.")
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "btn btn-success" },
+                [
+                  _c("router-link", { attrs: { to: "/checkout-finish" } }, [
+                    _vm._v("ЗАКАЗАТЬ")
+                  ])
+                ],
+                1
+              )
+            ])
           ])
         ])
       : _c("div", [_c("h1", [_vm._v("Ваша корзина пуста")])])
@@ -48162,7 +48166,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
           _self.userLogout().then(function (response) {
             resolve({
               title: 'До свидания!',
-              body: 'возвращайтесь ещё :)',
+              body: 'возвращайтесь снова :)',
               config: {
                 closeOnClick: true,
                 timeout: 2000
@@ -48905,12 +48909,20 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 							}
 						});
 					}).catch(function (e) {
+						var error = '';
+						if (e.data && e.data.errors) {
+							for (var i in e.data.errors) {
+								error += e.data.errors[i] + '\n\t';
+							}
+						} else {
+							error = 'Проверьте правильность полей';
+						}
 						reject({
 							title: 'Ошибка!',
-							body: 'Проверьте правильность полей',
+							body: error,
 							config: {
-								closeOnClick: true,
-								timeout: 3000
+								closeOnClick: true
+								// timeout: 3000
 							}
 						});
 					});
@@ -50871,19 +50883,36 @@ return Promise$1;
 					throw e;
 				});
 			});
+		},
+		checkout: function checkout(_ref7, orderData) {
+			var commit = _ref7.commit;
+
+			return new Promise(function (resolve, reject) {
+				axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].checkout, {
+					method: 'post',
+					data: orderData
+				}).then(function (response) {
+					// const cart = response.data.cart;
+					// commit('set', { type: 'cart', items: cart })
+					resolve(response);
+				}).catch(function (e) {
+					reject(e.response);
+					throw e;
+				});
+			});
 		}
 	},
 	mutations: {
-		set: function set(state, _ref7) {
-			var type = _ref7.type,
-			    items = _ref7.items;
+		set: function set(state, _ref8) {
+			var type = _ref8.type,
+			    items = _ref8.items;
 
 			state[type] = items;
 		},
-		pushProducts: function pushProducts(state, _ref8) {
-			var type = _ref8.type,
-			    key = _ref8.key,
-			    items = _ref8.items;
+		pushProducts: function pushProducts(state, _ref9) {
+			var type = _ref9.type,
+			    key = _ref9.key,
+			    items = _ref9.items;
 
 			state[type][key] = items;
 		}
@@ -50986,7 +51015,7 @@ return Promise$1;
           }
           resolve(response);
         }).catch(function (e) {
-          reject(e);
+          reject(e.response);
           throw e;
         });
       });
@@ -51596,6 +51625,363 @@ module.exports = function (err) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 89 */,
+/* 90 */,
+/* 91 */,
+/* 92 */,
+/* 93 */,
+/* 94 */,
+/* 95 */,
+/* 96 */,
+/* 97 */,
+/* 98 */,
+/* 99 */,
+/* 100 */,
+/* 101 */,
+/* 102 */,
+/* 103 */,
+/* 104 */,
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(106)
+/* template */
+var __vue_template__ = __webpack_require__(107)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\containers\\CheckoutFinish.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3a939db4", Component.options)
+  } else {
+    hotAPI.reload("data-v-3a939db4", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 106 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(0);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {
+			checkoutFields: {
+				email: '',
+				phone: '',
+				name: ''
+			}
+		};
+	},
+
+	computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])({
+		cart: 'products/cart',
+		userData: 'user/userData'
+	})),
+	methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({
+		orderCheckout: 'products/checkout'
+	}), {
+		checkout: function checkout() {
+			var _self = this;
+
+			this.$snotify.async('Пожалуйста ожидайте', 'Заказ', function () {
+				return new Promise(function (resolve, reject) {
+					_self.orderCheckout(_self.checkoutFields).then(function (response) {
+						resolve({
+							title: 'Успешно!',
+							body: 'Ваш заказ в обработке!',
+							config: {
+								closeOnClick: true,
+								timeout: 2000
+							}
+						});
+					}).catch(function (e) {
+						var error = '';
+						if (e.data && e.data.errors) {
+							for (var i in e.data.errors) {
+								error += e.data.errors[i] + '\n\t';
+							}
+						} else {
+							error = 'Проверьте правильность полей';
+						}
+						reject({
+							title: 'Ошибка!',
+							body: error,
+							config: {
+								closeOnClick: true
+								// timeout: 3000
+							}
+						});
+					});
+				});
+			});
+		}
+		// deleteFromCart(productId) {
+		// 	let _self = this;
+
+		// 	this.$snotify.async(
+		// 		'Пожалуйста ожидайте',
+		// 		'Удаление',
+		// 		() => new Promise((resolve, reject) => {
+		//       _self.deleteProductFromCart(productId)
+		// 				.then((response) => {
+		// 					resolve({
+		// 			        title: 'Успешно!',
+		// 			        body: 'Товар удален из корзины!',
+		// 			        config: {
+		// 			          closeOnClick: true,
+		// 			          timeout: 2000
+		// 			        }
+		// 		      })
+		// 		    })
+		// 		    .catch((e) => {
+		// 		    	reject({
+		// 		        title: 'Ошибка!',
+		// 		        body: 'Что-то пошло не так...',
+		// 		        config: {
+		// 		          closeOnClick: true,
+		// 		          timeout: 3000
+		// 		        }
+		// 		      })
+		// 		    })
+		// 	  	})
+		//   	)
+		// }
+
+	}),
+	mounted: function mounted() {
+		this.checkoutFields.email = this.userData.email;
+		this.checkoutFields.phone = this.userData.phone;
+		this.checkoutFields.name = this.userData.name;
+	}
+});
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "checkout-finish row" }, [
+    _vm.cart.length
+      ? _c("div", [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-sm-3 xs-hidden" }),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 col-sm-6" }, [
+              _c("h1", [_vm._v("Завершение заказа")]),
+              _vm._v(" "),
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "checkout-finish-form" }, [
+                _c("div", { staticClass: "input-field" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.checkoutFields.email,
+                        expression: "checkoutFields.email"
+                      }
+                    ],
+                    attrs: {
+                      type: "text",
+                      id: "checkout-email",
+                      placeholder: "Email"
+                    },
+                    domProps: { value: _vm.checkoutFields.email },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.checkoutFields,
+                          "email",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "input-field" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.checkoutFields.phone,
+                        expression: "checkoutFields.phone"
+                      }
+                    ],
+                    attrs: {
+                      type: "text",
+                      id: "checkout-phone",
+                      placeholder: "Телефон"
+                    },
+                    domProps: { value: _vm.checkoutFields.phone },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.checkoutFields,
+                          "phone",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "input-field" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.checkoutFields.name,
+                        expression: "checkoutFields.name"
+                      }
+                    ],
+                    attrs: {
+                      type: "text",
+                      id: "checkout-name",
+                      placeholder: "Ваше имя"
+                    },
+                    domProps: { value: _vm.checkoutFields.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.checkoutFields,
+                          "name",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-success",
+                    on: {
+                      click: function($event) {
+                        _vm.checkout()
+                      }
+                    }
+                  },
+                  [_vm._v("ОФОРМИТЬ ЗАКАЗ")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-sm-3 xs-hidden" })
+          ])
+        ])
+      : _c("div", [
+          _c("h1", [_vm._v("Выберите что-нибудь, что бы заказать...")])
+        ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h4", [
+      _c("i", [_vm._v("Наш менеджер свяжется с Вами в ближайшее время")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3a939db4", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

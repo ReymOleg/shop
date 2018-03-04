@@ -5,6 +5,14 @@ import routes from './routes.js'
 import App from './App.vue'
 import store from './store'
 
+import Snotify, { SnotifyPosition } from 'vue-snotify'
+const notifyOptions = {
+  toast: {
+    position: SnotifyPosition.rightBottom
+  }
+}
+Vue.use(Snotify, notifyOptions)
+
 import VueCookie from 'vue-cookie';
 Vue.use(VueCookie);
 

@@ -1,5 +1,6 @@
 <template>
   <div id="parent" class="wrapper">
+    <vue-snotify></vue-snotify>
     <div id="content" :class="classes.mainClasses">
       <header class="container-fluid">
         <cart cartClose="cartClose()"></cart>
@@ -48,7 +49,7 @@
             <router-link key="parentCategory.url" :to="'/category/' + parentCategory.url">{{ parentCategory.name }}</router-link>
             <div class="nav-subcategories">
               <div class="col-xs-8 col-sm-6">
-                <router-link class="block" key="subcategory.url" v-for="subcategory of parentCategory.subcategories" :to="'/category/' + parentCategory.url + '/' + subcategory.url" @click="menuClose()">{{ subcategory.name }}</router-link>
+                <router-link class="block" :key="subcategory.url" v-for="subcategory of parentCategory.subcategories" :to="'/category/' + parentCategory.url + '/' + subcategory.url" @click="menuClose()">{{ subcategory.name }}</router-link>
               </div>
               <div class="col-xs-4 col-sm-6">
                 <div class="block">
@@ -72,6 +73,7 @@
 </template>
 
 <script>
+import Snotify from 'vue-snotify'
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 import Search from './components/Search.vue'

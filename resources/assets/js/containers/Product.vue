@@ -34,8 +34,39 @@ import { mapActions } from 'vuex'
 		methods: {
 			...mapActions({
 				getProduct: 'products/getProduct',
-				addToCart: 'products/addToCart'
+				toCart: 'products/addToCart'
 			}),
+			addToCart(productId) {
+				let _self = this;
+
+				this.$snotify.async(
+					'Пожалуйста ожидайте',
+					'В корзину',
+					() => new Promise((resolve, reject) => {
+			      _self.toCart(productId)
+							.then((response) => {
+								resolve({
+						        title: 'Успешно!',
+						        body: 'Товар добавлен!',
+						        config: {
+						          closeOnClick: true,
+						          timeout: 2000
+						        }
+					      })
+					    })
+					    .catch((e) => {
+					    	reject({
+					        title: 'Ошибка!',
+					        body: 'Что-то пошло не так...',
+					        config: {
+					          closeOnClick: true,
+					          timeout: 3000
+					        }
+					      })
+					    })
+			  	})
+		  	)
+			}
 		},
 		mounted() {
 			this.getProduct(this.$route.params[0])

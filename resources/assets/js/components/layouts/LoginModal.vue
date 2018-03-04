@@ -80,10 +80,69 @@
 				}
 			},
 			loginUser() {
-				this.login(this.loginFields)
+				let _self = this;
+
+				this.$snotify.async(
+					'Пожалуйста ожидайте',
+					'Авторизация',
+					() => new Promise((resolve, reject) => {
+			      _self.login(_self.loginFields)
+							.then((response) => {
+								resolve({
+					        title: 'Успешно!',
+					        body: 'Здравствуйте, ' + response.data.user.name + '!',
+					        config: {
+					          closeOnClick: true,
+					          timeout: 2000
+					        }
+					      })
+					    })
+					    .catch((e) => {
+					    	reject({
+					        title: 'Ошибка!',
+					        body: 'Проверьте правильность полей',
+					        config: {
+					          closeOnClick: true,
+					          timeout: 3000
+					        }
+					      })
+					    })
+			  	})
+		  	)
+
 			},
 			createUser() {
-				this.create(this.registerFields)
+				let _self = this;
+
+				this.$snotify.async(
+					'Пожалуйста ожидайте',
+					'Авторизация',
+					() => new Promise((resolve, reject) => {
+			      _self.create(_self.registerFields)
+							.then((response) => {
+								resolve({
+					        title: 'Успешно!',
+					        body: 'Здравствуйте, ' + response.data.user.name + '!',
+					        config: {
+					          closeOnClick: true,
+					          timeout: 2000
+					        }
+					      })
+					    })
+					    .catch((e) => {
+					    	reject({
+					        title: 'Ошибка!',
+					        body: 'Проверьте правильность полей',
+					        config: {
+					          closeOnClick: true,
+					          timeout: 3000
+					        }
+					      })
+					    })
+			  	})
+		  	)
+		  	
+				
 			}
 		},
 		computed: {

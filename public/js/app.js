@@ -47443,8 +47443,36 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 	})),
 	methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({
 		getProduct: 'products/getProduct',
-		addToCart: 'products/addToCart'
-	})),
+		toCart: 'products/addToCart'
+	}), {
+		addToCart: function addToCart(productId) {
+			var _self = this;
+
+			this.$snotify.async('Пожалуйста ожидайте', 'В корзину', function () {
+				return new Promise(function (resolve, reject) {
+					_self.toCart(productId).then(function (response) {
+						resolve({
+							title: 'Успешно!',
+							body: 'Товар добавлен!',
+							config: {
+								closeOnClick: true,
+								timeout: 2000
+							}
+						});
+					}).catch(function (e) {
+						reject({
+							title: 'Ошибка!',
+							body: 'Что-то пошло не так...',
+							config: {
+								closeOnClick: true,
+								timeout: 3000
+							}
+						});
+					});
+				});
+			});
+		}
+	}),
 	mounted: function mounted() {
 		this.getProduct(this.$route.params[0]);
 	},
@@ -48457,13 +48485,40 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 		cart: 'products/cart'
 	})),
 	methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({
-		deleteFromCart: 'products/deleteFromCart'
+		deleteProductFromCart: 'products/deleteFromCart'
 	}), {
 		cartClose: function cartClose() {
 			this.$options.parent.cartClose();
 			// console.log(this);
 			// this.props.cartClose();
 			// this.$parent.$options.methods.cartClose()
+		},
+		deleteFromCart: function deleteFromCart(productId) {
+			var _self = this;
+
+			this.$snotify.async('Пожалуйста ожидайте', 'Удаление', function () {
+				return new Promise(function (resolve, reject) {
+					_self.deleteProductFromCart(productId).then(function (response) {
+						resolve({
+							title: 'Успешно!',
+							body: 'Товар удален из корзины!',
+							config: {
+								closeOnClick: true,
+								timeout: 2000
+							}
+						});
+					}).catch(function (e) {
+						reject({
+							title: 'Ошибка!',
+							body: 'Что-то пошло не так...',
+							config: {
+								closeOnClick: true,
+								timeout: 3000
+							}
+						});
+					});
+				});
+			});
 		}
 	}),
 	watch: {
@@ -48751,10 +48806,58 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 			}
 		},
 		loginUser: function loginUser() {
-			this.login(this.loginFields);
+			var _self = this;
+
+			this.$snotify.async('Пожалуйста ожидайте', 'Авторизация', function () {
+				return new Promise(function (resolve, reject) {
+					_self.login(_self.loginFields).then(function (response) {
+						resolve({
+							title: 'Успешно!',
+							body: 'Здравствуйте, ' + response.data.user.name + '!',
+							config: {
+								closeOnClick: true,
+								timeout: 2000
+							}
+						});
+					}).catch(function (e) {
+						reject({
+							title: 'Ошибка!',
+							body: 'Проверьте правильность полей',
+							config: {
+								closeOnClick: true,
+								timeout: 3000
+							}
+						});
+					});
+				});
+			});
 		},
 		createUser: function createUser() {
-			this.create(this.registerFields);
+			var _self = this;
+
+			this.$snotify.async('Пожалуйста ожидайте', 'Авторизация', function () {
+				return new Promise(function (resolve, reject) {
+					_self.create(_self.registerFields).then(function (response) {
+						resolve({
+							title: 'Успешно!',
+							body: 'Здравствуйте, ' + response.data.user.name + '!',
+							config: {
+								closeOnClick: true,
+								timeout: 2000
+							}
+						});
+					}).catch(function (e) {
+						reject({
+							title: 'Ошибка!',
+							body: 'Проверьте правильность полей',
+							config: {
+								closeOnClick: true,
+								timeout: 3000
+							}
+						});
+					});
+				});
+			});
 		}
 	}),
 	computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])({
@@ -50676,31 +50779,39 @@ return Promise$1;
 		addToCart: function addToCart(_ref5, productId) {
 			var commit = _ref5.commit;
 
-			axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].addToCart, {
-				method: 'post',
-				data: {
-					product_id: productId
-				}
-			}).then(function (response) {
-				var cart = response.data.cart;
-				commit('set', { type: 'cart', items: cart });
-			}).catch(function (e) {
-				throw e;
+			return new Promise(function (resolve, reject) {
+				axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].addToCart, {
+					method: 'post',
+					data: {
+						product_id: productId
+					}
+				}).then(function (response) {
+					var cart = response.data.cart;
+					commit('set', { type: 'cart', items: cart });
+					resolve(response);
+				}).catch(function (e) {
+					reject(e);
+					throw e;
+				});
 			});
 		},
 		deleteFromCart: function deleteFromCart(_ref6, cartId) {
 			var commit = _ref6.commit;
 
-			axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].deleteFromCart, {
-				method: 'post',
-				data: {
-					cart_id: cartId
-				}
-			}).then(function (response) {
-				var cart = response.data.cart;
-				commit('set', { type: 'cart', items: cart });
-			}).catch(function (e) {
-				throw e;
+			return new Promise(function (resolve, reject) {
+				axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].deleteFromCart, {
+					method: 'post',
+					data: {
+						cart_id: cartId
+					}
+				}).then(function (response) {
+					var cart = response.data.cart;
+					commit('set', { type: 'cart', items: cart });
+					resolve(response);
+				}).catch(function (e) {
+					reject(e);
+					throw e;
+				});
 			});
 		}
 	},
@@ -50776,41 +50887,50 @@ return Promise$1;
     login: function login(_ref2, data) {
       var commit = _ref2.commit;
 
-      axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].login, {
-        method: 'post',
-        data: data
-      }).then(function (response) {
-        var data = response.data;
-        if (data.auth) {
-          commit('set', { type: 'auth', items: true });
-        }
-        if (data.user) {
-          commit('set', { type: 'userData', items: { email: data.user.email, name: data.user.name } });
-        }
-        if (data.token) {
-          __WEBPACK_IMPORTED_MODULE_1_vue_cookie___default.a.set('token', response.data.token, { expires: '1Y' });
-        }
-      }).catch(function (e) {
-        throw e;
+      return new Promise(function (resolve, reject) {
+        axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].login, {
+          method: 'post',
+          data: data
+        }).then(function (response) {
+          var data = response.data;
+          if (data.auth) {
+            commit('set', { type: 'auth', items: true });
+          }
+          if (data.user) {
+            commit('set', { type: 'userData', items: { email: data.user.email, name: data.user.name } });
+          }
+          if (data.token) {
+            __WEBPACK_IMPORTED_MODULE_1_vue_cookie___default.a.set('token', response.data.token, { expires: '1Y' });
+          }
+
+          resolve(response);
+        }).catch(function (e) {
+          reject(e);
+          throw e;
+        });
       });
     },
     create: function create(_ref3, data) {
       var commit = _ref3.commit;
 
-      axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].createUser, {
-        method: 'post',
-        data: data
-      }).then(function (response) {
-        var user = response.data.user;
-        if (user) {
-          commit('set', { type: 'auth', items: true });
-          commit('set', { type: 'userData', items: { email: user.email, name: user.name } });
-        }
-        if (response.data.token) {
-          __WEBPACK_IMPORTED_MODULE_1_vue_cookie___default.a.set('token', response.data.token, { expires: '1Y' });
-        }
-      }).catch(function (e) {
-        throw e;
+      return new Promise(function (resolve, reject) {
+        axios(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* url */].createUser, {
+          method: 'post',
+          data: data
+        }).then(function (response) {
+          var user = response.data.user;
+          if (user) {
+            commit('set', { type: 'auth', items: true });
+            commit('set', { type: 'userData', items: { email: user.email, name: user.name } });
+          }
+          if (response.data.token) {
+            __WEBPACK_IMPORTED_MODULE_1_vue_cookie___default.a.set('token', response.data.token, { expires: '1Y' });
+          }
+          resolve(response);
+        }).catch(function (e) {
+          reject(e);
+          throw e;
+        });
       });
     },
     logout: function logout(_ref4, data) {

@@ -77,34 +77,42 @@ export default {
 		    })
   	},
   	addToCart({commit}, productId) {
-	  	axios(config.url.addToCart, {
-          method: 'post',
-          data: {
-          	product_id: productId
-          }
-        })
-	    .then(response => {
-			const cart = response.data.cart;
-			commit('set', { type: 'cart', items: cart })
-	    })
-	    .catch(e => {
-	      throw e
-	    })
+  		return new Promise((resolve, reject) => {
+		  	axios(config.url.addToCart, {
+	          method: 'post',
+	          data: {
+	          	product_id: productId
+	          }
+	        })
+		    .then(response => {
+					const cart = response.data.cart;
+					commit('set', { type: 'cart', items: cart })
+					resolve(response);
+		    })
+		    .catch(e => {
+		      reject(e);
+		      throw e
+		    })
+		})
   	},
   	deleteFromCart({commit}, cartId) {
-	  	axios(config.url.deleteFromCart, {
-          method: 'post',
-          data: {
-          	cart_id: cartId
-          }
-        })
-	    .then(response => {
-			const cart = response.data.cart;
-			commit('set', { type: 'cart', items: cart })
-	    })
-	    .catch(e => {
-	      throw e
-	    })
+  		return new Promise((resolve, reject) => {
+		  	axios(config.url.deleteFromCart, {
+	          method: 'post',
+	          data: {
+	          	cart_id: cartId
+	          }
+	        })
+		    .then(response => {
+					const cart = response.data.cart;
+					commit('set', { type: 'cart', items: cart })
+					resolve(response);
+		    })
+		    .catch(e => {
+		    	reject(e);
+		      throw e
+		    })
+		  })
   	},
   },
   mutations: {

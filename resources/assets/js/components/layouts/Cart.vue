@@ -61,13 +61,44 @@ import { mapActions } from 'vuex'
 		},
 		methods: {
 			...mapActions({
-				deleteFromCart: 'products/deleteFromCart'
+				deleteProductFromCart: 'products/deleteFromCart'
 			}),
 			cartClose() {
 				this.$options.parent.cartClose()
 				// console.log(this);
 				// this.props.cartClose();
 				// this.$parent.$options.methods.cartClose()
+			},
+			deleteFromCart(productId) {
+				let _self = this;
+
+				this.$snotify.async(
+					'Пожалуйста ожидайте',
+					'Удаление',
+					() => new Promise((resolve, reject) => {
+			      _self.deleteProductFromCart(productId)
+							.then((response) => {
+								resolve({
+						        title: 'Успешно!',
+						        body: 'Товар удален из корзины!',
+						        config: {
+						          closeOnClick: true,
+						          timeout: 2000
+						        }
+					      })
+					    })
+					    .catch((e) => {
+					    	reject({
+					        title: 'Ошибка!',
+					        body: 'Что-то пошло не так...',
+					        config: {
+					          closeOnClick: true,
+					          timeout: 3000
+					        }
+					      })
+					    })
+				  	})
+			  	)
 			}
 		},
 		watch: {

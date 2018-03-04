@@ -43,44 +43,53 @@ export default {
         })
     },
     login: ({commit}, data) => {
-      axios(config.url.login, {
-          method: 'post',
-          data: data,
-        })
-        .then(response => {
-          const data = response.data;
-          if(data.auth) {
-            commit('set', { type: 'auth', items: true })
-          }
-          if(data.user) {
-            commit('set', { type: 'userData', items: {email: data.user.email, name: data.user.name} })
-          }
-          if(data.token) {
-            VueCookie.set('token', response.data.token, { expires: '1Y' });
-          }
-        })
-        .catch(e => {
-          throw e
+      return new Promise((resolve, reject) => {
+        axios(config.url.login, {
+            method: 'post',
+            data: data,
+          })
+          .then(response => {
+            const data = response.data;
+            if(data.auth) {
+              commit('set', { type: 'auth', items: true })
+            }
+            if(data.user) {
+              commit('set', { type: 'userData', items: {email: data.user.email, name: data.user.name} })
+            }
+            if(data.token) {
+              VueCookie.set('token', response.data.token, { expires: '1Y' });
+            }
+
+            resolve(response);
+          })
+          .catch(e => {
+            reject(e);
+            throw e
+          })
         })
     },
     create: ({commit}, data) => {
-      axios(config.url.createUser, {
-          method: 'post',
-          data: data,
-        })
-        .then(response => {
-          const user = response.data.user;
-          if(user) {
-            commit('set', { type: 'auth', items: true })
-            commit('set', { type: 'userData', items: {email: user.email, name: user.name} })
-          }
-          if(response.data.token) {
-            VueCookie.set('token', response.data.token, { expires: '1Y' });
-          }
-        })
-        .catch(e => {
-          throw e
-        })
+      return new Promise((resolve, reject) => {
+        axios(config.url.createUser, {
+            method: 'post',
+            data: data,
+          })
+          .then(response => {
+            const user = response.data.user;
+            if(user) {
+              commit('set', { type: 'auth', items: true })
+              commit('set', { type: 'userData', items: {email: user.email, name: user.name} })
+            }
+            if(response.data.token) {
+              VueCookie.set('token', response.data.token, { expires: '1Y' });
+            }
+            resolve(response);
+          })
+          .catch(e => {
+            reject(e);
+            throw e
+          })
+      })
     },
     logout: ({commit}, data) => {
       axios(config.url.logout, {

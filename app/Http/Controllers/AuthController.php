@@ -41,7 +41,6 @@ class AuthController extends Controller {
 
 
 	public function checkAuth(Request $request) {
-
 		$user = null;
 		$token = $this->token;
 
@@ -58,15 +57,18 @@ class AuthController extends Controller {
 				$user->token = $this->token;
 				$user->save();
 				$this->response['user'] = $user;
+				$this->response['token'] = $this->token;
 			}
-
-			$this->response['token'] = $this->token;
-
 		} else {
 
 			$user = DB::table('users')->where('token', $this->token)->first();
+			
+			if(is_null($user)) {
+				$this->token = null;
+				return $this->checkAuth($request);
+			}
 
-			if(count($user) && substr($this->token, 0, 4) != 'temp') {
+			if(substr($this->token, 0, 4) != 'temp') {
 				$this->response['auth'] = !(bool)$user->fake;
 				$this->response['token'] = $user->token;
 				$this->response['user'] = $user;
